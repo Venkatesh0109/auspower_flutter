@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "95819874066",
+    "project_id": "auspower-8275c",
+    "storage_bucket": "auspower-8275c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95819874066:android:4ed2af40a06efcf79bbdcb",
+        "android_client_info": {
+          "package_name": "com.ausweg.iiot.auspower"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ2yZ5xhQiKF9PVCraP_kfrVf_VBS3abg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

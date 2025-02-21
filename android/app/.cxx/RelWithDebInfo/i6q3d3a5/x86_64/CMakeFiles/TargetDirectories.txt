@@ -1,0 +1,2 @@
+/Users/apple/Downloads/auspower_flutter/android/app/.cxx/RelWithDebInfo/i6q3d3a5/x86_64/CMakeFiles/edit_cache.dir
+/Users/apple/Downloads/auspower_flutter/android/app/.cxx/RelWithDebInfo/i6q3d3a5/x86_64/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,2 @@
+/Users/apple/Downloads/auspower_flutter/android/app/.cxx/Debug/5a284660/x86/CMakeFiles/edit_cache.dir
+/Users/apple/Downloads/auspower_flutter/android/app/.cxx/Debug/5a284660/x86/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,98 @@
+name: auspower_flutter
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: '>=3.3.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  animate_do: ^3.3.4
+  animated_visibility: ^0.0.4
+  cached_network_image: ^3.3.1
+  dio: ^5.4.3+1
+  flutter_secure_storage: ^9.2.2
+  fluttertoast: ^8.2.12
+  intl: ^0.19.0
+  logger: ^2.3.0
+  ntp: ^2.0.0
+  pinput: ^5.0.0
+  pretty_dio_logger: ^1.3.1
+  provider: ^6.1.2
+  readmore: ^3.0.0
+  share_plus: ^10.0.0
+  shared_preferences: ^2.2.3
+  shimmer: ^3.0.0
+  url_launcher: ^6.3.0
+  http: any
+  cupertino_icons: ^1.0.8
+  path_provider: ^2.1.5
+  excel: ^4.0.6
+  carousel_slider: ^5.0.0
+  mime: any
+  syncfusion_flutter_datagrid_export: ^28.2.3
+  syncfusion_flutter_datagrid: ^28.2.3
+  marquee: ^2.3.0
+  syncfusion_flutter_charts: ^28.2.3
+  syncfusion_flutter_pdf: ^28.2.3
+  firebase_core: ^3.10.0
+  firebase_messaging: ^15.2.3
+  flutter_local_notifications: ^18.0.1
+  lottie: ^3.3.0
+  uuid: any
+  path: any
+  sqflite: any
+  permission_handler: ^11.3.1
+  pdf: ^3.11.2
+  screenshot: ^3.0.0
+  data_table_2: ^2.5.18
+  open_file: ^3.5.10
+  syncfusion_flutter_xlsio: any
+  table_calendar: ^3.0.9
+  month_year_picker: ^0.4.0+1
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  
+  ## Assets
+  assets:
+  ## Icons
+    - assets/icons/
+    - assets/icons/bottom_bar_icons/
+    - assets/icons/profile_icons/
+    - assets/icons/contact_icons/
+
+  ## Images
+    - assets/images/
+    - assets/images/onboarding_images/
+    - assets/images/auth_images/
+
+  ## Fonts
+  fonts:
+    - family: Mulish
+      fonts:
+        - asset: assets/fonts/Mulish-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Mulish-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Mulish-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Mulish-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Mulish-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Mulish-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Mulish-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Mulish-Black.ttf
+          weight: 900
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
