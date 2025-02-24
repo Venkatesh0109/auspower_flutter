@@ -542,7 +542,7 @@ Future<void> pickDate(
   );
 
   String formattedDate =
-      DateFormat('dd-MM-yyyy').format(pickedDate!); // Format the date
+      DateFormat('dd-MM-yyyy').format(pickedDate); // Format the date
   onDatePicked(formattedDate); // Pass the formatted date back
 }
 
