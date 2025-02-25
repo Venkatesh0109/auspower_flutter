@@ -114,7 +114,7 @@ extension StringExtension on String {
 
   bool get isImage {
     String? mimeType = lookupMimeType(this);
-    return mimeType.startsWith('image/') ?? false;
+    return mimeType?.startsWith('image/') ?? false;
   }
 
   String prefix(String val) {

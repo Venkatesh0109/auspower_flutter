@@ -11,6 +11,7 @@ class PowerConsumptionProvider extends ChangeNotifier {
   List equipmentLists = [];
   List meterLists = [];
   List powerReportFields = [];
+  List ipAddress = [];
   List<Map<String, dynamic>> energyEnterList = [];
 
   bool _isLoading = false;
@@ -77,6 +78,14 @@ class PowerConsumptionProvider extends ChangeNotifier {
     //   {"equipment_group_name": "All"},
     //   ...data
     // ];
+    notifyListeners();
+  }
+  void getIpAddres(List data) {
+    ipAddress =
+    [
+      {"ip_address": "All"},
+      ...data
+    ];
     notifyListeners();
   }
 

@@ -38,8 +38,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((t) {
-      TableRepository().gettableData(context,
-          plantId: widget.companyData?.plantId.toString() ?? "");
+      TableRepository().gettableData(
+        context,
+        params: {
+          "plant_id": widget.companyData?.plantId.toString(),
+          "group_for": 'regular',
+          "groupby": 'meter',
+          "period_id": 'cur_shift',
+        },
+      );
       TableRepository().getGraphData(context,
           plantId: widget.companyData?.plantId.toString() ?? "");
     });
@@ -219,67 +226,49 @@ class EmployeeDataSource extends DataGridSource {
                 "${FormatDate.formattedStr(e.dateTime.toString())} & ${FormatDate.time(e.dateTime.toString())}"),
         DataGridCell<String>(
             columnName: 'Meter', value: "${e.meterCode} - ${e.meterName}"),
-        DataGridCell<String>(
-            columnName: 'Slave Id', value: "${e.slaveId}"),
-        DataGridCell<double>(
-            columnName: 'C.KWH', value: e.machineKWh),
+        DataGridCell<String>(columnName: 'Slave Id', value: "${e.slaveId}"),
+        DataGridCell<double>(columnName: 'C.KWH', value: e.machineKWh),
         DataGridCell<double>(columnName: 'Energy', value: e.kWh),
         DataGridCell<double>(columnName: 'kva', value: e.kva),
         DataGridCell<double>(
             columnName: 'Average Powerfactor', value: e.avgPowerfactor),
         DataGridCell<double>(columnName: 'Power(kw)', value: e.kw),
         DataGridCell<String>(columnName: 'Meter Type', value: e.meterType),
-        
         DataGridCell<String>(columnName: 'IP Address', value: e.ipAddress),
       ]);
     }).toList();
-
-    // _employeeData.sort((a, b) {
-    //   bool aIsRunning =
-    //       a.getCells()[0].value['status'] == 'N'; // Assuming 'N' is not running
-    //   bool bIsRunning = b.getCells()[0].value['status'] == 'N';
-    //   notifyListeners();
-
-    //   return aIsRunning ? (bIsRunning ? 1 : 0) : -1; // Sort 'running' first
-    // });
-    // _employeeData.sort((a, b) {
-    //   bool aIsRunning = a
-    //           .getCells()
-    //           .firstWhere((cell) => cell.columnName == 'Status')
-    //           .value['status'] ==
-    //       'N';
-
-    //   bool bIsRunning = b
-    //           .getCells()
-    //           .firstWhere((cell) => cell.columnName == 'Status')
-    //           .value['status'] ==
-    //       'N';
-
-    //   return aIsRunning ? (bIsRunning ? 1 : 0) : -1;
-    // });
-
-    // notifyListeners();
   }
-  // void sortData(String columnName) {
-  //   if (columnName == 'S.no') {
-  //     _employeeData.sort((a, b) {
-  //       logger.f(a.getCells()[0].value['status'][0]);
-
-  //       bool aIsRunning = a.getCells()[0].value['status'] ==
-  //           'N'; // Assuming 'N' is not running
-  //       bool bIsRunning = b.getCells()[0].value['status'] == 'N';
-
-  //       return aIsRunning ? (bIsRunning ? 1 : 0) : -1;
-  //     });
-  //   }
-  //   // Add sorting logic for other columns if needed
-  //   notifyListeners();
-  // }
 
   List<DataGridRow> _employeeData = [];
 
   @override
   List<DataGridRow> get rows => _employeeData;
+
+  @override
+  int compare(DataGridRow? a, DataGridRow? b, SortColumnDetails sortColumn) {
+    String columnName = sortColumn.name;
+    bool isAscending =
+        sortColumn.sortDirection == DataGridSortDirection.ascending;
+
+    if (columnName == 'Status') {
+      String statusA = a!
+          .getCells()
+          .firstWhere((c) => c.columnName == 'Status')
+          .value['status'];
+      String statusB = b!
+          .getCells()
+          .firstWhere((c) => c.columnName == 'Status')
+          .value['status'];
+
+      int isRunningA = (statusA == 'N') ? 1 : 0;
+      int isRunningB = (statusB == 'N') ? 1 : 0;
+
+      return isAscending
+          ? isRunningA.compareTo(isRunningB)
+          : isRunningB.compareTo(isRunningA);
+    }
+    return super.compare(a, b, sortColumn);
+  }
 
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {

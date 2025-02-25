@@ -258,7 +258,7 @@ class SqliteListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    // final width = MediaQuery.of(context).size.width;
     final provider = Provider.of<SqlDbProvider>(context);
 
     DateTime parsedDateTime = DateFormat("dd-MM-yyyy HH:mm:ss").parse(dateTime);
@@ -401,6 +401,7 @@ class _NotificationDeleteDialogState extends State<NotificationDeleteDialog> {
                       ? () {
                           Navigator.pop(context);
 
+                          // ignore: void_checks
                           return showMessage(
                               "Kindly Select Notification to Delete");
                         }

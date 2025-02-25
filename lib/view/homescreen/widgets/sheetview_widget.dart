@@ -67,8 +67,8 @@ class _SheetViewWidgetState extends State<SheetViewWidget> {
                             columnWidthMode: ColumnWidthMode.auto),
                         GridColumn(
                             columnName: 'Status',
-                            width: 100,
-                            allowSorting: false,
+                            width: 120,
+                            allowSorting: true,
                             label: Container(
                               color: Palette.primary,
                               padding: const EdgeInsets.all(16.0),

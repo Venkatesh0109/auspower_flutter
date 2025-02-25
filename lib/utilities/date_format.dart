@@ -62,6 +62,7 @@ class FormatDate {
             try {
               parseDate = DateFormat("yyyy-MM-dd").parse(date);
               inputDate = DateTime.parse(parseDate.toString());
+            // ignore: empty_catches
             } on Exception {}
           }
         }

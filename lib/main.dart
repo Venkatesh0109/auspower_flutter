@@ -19,148 +19,145 @@ import 'theme/theme_constants.dart';
 import 'theme/theme_manager.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+/// 🔹 Initialize Local Notifications Plugin
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
+/// 🔹 Define Android Notification Channel
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    importance: Importance.high,
-    playSound: true,
-    showBadge: true,
-    enableVibration: true);
+  'high_importance_channel', // ID
+  'High Importance Notifications', // Name
+  description: 'This channel is used for important notifications.',
+  importance: Importance.high,
+  playSound: true,
+  showBadge: true,
+  enableVibration: true,
+);
 
-//firebase background message handler
+/// 🔹 Firebase Background Message Handler
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  //await Firebase.initializeApp();
-  logger.e(message.notification!);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   final dateTime = DateTime.now();
-  final formatter = DateFormat("dd-MM-yyyy hh:mm:ss");
-  final formattedDateTime = formatter.format(dateTime);
+  final formattedDateTime = DateFormat("dd-MM-yyyy HH:mm:ss").format(dateTime);
 
   SqlDbRepository().createItem(
-    NotificationModel(message.notification!.title.toString(),
-        message.notification!.body.toString(), formattedDateTime.toString()),
+    NotificationModel(
+      message.notification?.title ?? "No Title",
+      message.notification?.body ?? "No Body",
+      formattedDateTime,
+    ),
   );
-  // NotificationHandler.handle(remoteMessage: message);
 }
 
+/// 🔹 Main Function
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // NotificationService.init();
 
-  try {
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
-  } catch (e) {
-    logger.i("Firebase is already initialized");
-  }
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  await FirebaseMessaging.instance.requestPermission(
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  /// 🔸 Request Permissions for Notifications (iOS + Android)
+  await messaging.requestPermission(
     alert: true,
     badge: true,
     sound: true,
+    announcement: false,
     carPlay: false,
     criticalAlert: true,
     provisional: false,
   );
-  // Firebase local notification plugin
+
+  /// 🔸 Register Notification Channel for Android
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
-  // logger.w("Notification sound set: ${channel.sound}");
-  // Firebase messaging
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+
+  /// 🔸 Set Foreground Notification Behavior (iOS)
+  await messaging.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
     sound: true,
   );
 
+  /// 🔸 Initialize Local Notification Settings
   const androidSetting = AndroidInitializationSettings('@mipmap/ic_launcher');
   const iOSSetting = DarwinInitializationSettings(
     requestAlertPermission: true,
     requestBadgePermission: true,
     requestSoundPermission: true,
   );
-
-  const setting =
-      InitializationSettings(android: androidSetting, iOS: iOSSetting);
-
-  FirebaseMessaging.onMessage.listen(
-    (RemoteMessage message) {
-      logger.e(message.notification!);
-
-      final dateTime = DateTime.now();
-      final formatter = DateFormat("dd-MM-yyyy hh:mm:ss");
-      final formattedDateTime = formatter.format(dateTime);
-
-      SqlDbRepository().createItem(
-        NotificationModel(
-            message.notification!.title.toString(),
-            message.notification!.body.toString(),
-            formattedDateTime.toString()),
-      );
-      // NotificationHandler.handle(remoteMessage: message);
-      try {
-        RemoteNotification? notification = message.notification;
-
-        // AppleNotification? apple = message.notification?.apple;
-        AndroidNotification? android = message.notification?.android;
-        if (notification != null && android != null) {
-          flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              iOS: const DarwinNotificationDetails(
-                presentAlert: true, // Alert will be shown
-                presentBadge: true, // Badge will be updated
-                presentSound: true, // Custom sound enabled
-                // sound: 'custom_sound.caf', // iOS specific custom sound file
-                interruptionLevel:
-                    InterruptionLevel.active, // Optional: Interrupt the user
-              ),
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                color: Colors.blue,
-                // sound: RawResourceAndroidNotificationSound(''),
-                playSound: true,
-                enableVibration: true,
-                icon: '@mipmap/ic_launcher', // Corrected icon reference
-                styleInformation: const BigTextStyleInformation(''),
-              ),
-            ),
-          );
-        }
-      } catch (e) {
-        print("firebase error:$e");
-      }
-      print("foreground message invoked");
-    },
-  );
-
-  FirebaseMessaging.instance.onTokenRefresh.listen((event) {
-    print("refreshed Token:$event");
-  });
-
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  const settings = InitializationSettings(android: androidSetting, iOS: iOSSetting);
 
   flutterLocalNotificationsPlugin.initialize(
-    setting,
+    settings,
     onDidReceiveNotificationResponse: (details) {
       onNotificationTap(details.payload ?? "");
     },
   );
 
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,DeviceOrientation.landscapeLeft,DeviceOrientation.landscapeRight]).then(
-      (_) => runApp(MultiProvider(providers: providers, child: const MyApp())));
-  // CustomDateTime().getOffSet();
-  // runApp(MultiProvider(providers: providers, child: const MyApp()));
+  /// 🔸 Foreground Message Handler
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    _showNotification(message);
+  });
+
+  /// 🔸 Background Message Handler
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  /// 🔸 Token Refresh Listener
+  FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
+    // print("🔥 FCM Token Refreshed: $newToken");
+  });
+
+  /// 🔸 Set Preferred Orientation & Run App
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]).then((_) {
+    runApp(MultiProvider(providers: providers, child: const MyApp()));
+  });
 }
 
+/// 🔹 Function to Show Notifications
+void _showNotification(RemoteMessage message) {
+  RemoteNotification? notification = message.notification;
+  AndroidNotification? android = message.notification?.android;
+
+  if (notification != null && android != null) {
+    flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          channelDescription: channel.description,
+          importance: Importance.high,
+          priority: Priority.high,
+          playSound: true,
+          enableVibration: true,
+          sound: const RawResourceAndroidNotificationSound('custom_sound'),
+          icon: '@mipmap/ic_launcher',
+          styleInformation: const BigTextStyleInformation(''),
+        ),
+        iOS: const DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+                    sound: 'custom_sound.caf', // 🔹 For iOS
+
+        ),
+      ),
+    );
+  }
+}
+
+/// 🔹 Main App Widget
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -175,19 +172,19 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       builder: (context, themeManager, info, child) {
         return MaterialApp(
           key: mainKey,
-          builder: (BuildContext context, Widget? child) => Stack(children: [
-            if (child != null) child,
-            if (!info.isHadInternet) const NoInternetScreen(),
-          ]),
+          builder: (BuildContext context, Widget? child) => Stack(
+            children: [
+              if (child != null) child,
+              if (!info.isHadInternet) const NoInternetScreen(),
+            ],
+          ),
           debugShowCheckedModeBanner: false,
           title: AppStrings.appName,
           theme: lightTheme,
           home: const SplashScreen(),
           localizationsDelegates: const [
-            MonthYearPickerLocalizations
-                .delegate, // Required for month-year picker
+            MonthYearPickerLocalizations.delegate, // Required for month-year picker
           ],
-          // darkTheme: darkTheme,
           themeMode: themeManager.themeMode,
           scaffoldMessengerKey: snackbarKey,
         );

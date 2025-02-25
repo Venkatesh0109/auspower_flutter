@@ -72,6 +72,7 @@ flutter:
     - assets/images/
     - assets/images/onboarding_images/
     - assets/images/auth_images/
+    - assets/sound/
 
   ## Fonts
   fonts:

@@ -1,11 +1,14 @@
 import 'package:auspower_flutter/common/widgets/loaders.dart';
 import 'package:auspower_flutter/constants/keys.dart';
 import 'package:auspower_flutter/models/plant_list_data.dart';
+import 'package:auspower_flutter/providers/power_consumption_provider.dart';
 import 'package:auspower_flutter/providers/table_provider.dart';
+import 'package:auspower_flutter/repositories/power_consumption_repository.dart';
 import 'package:auspower_flutter/repositories/table_repository.dart';
 import 'package:auspower_flutter/theme/theme_guide.dart';
 import 'package:auspower_flutter/view/dashboardscreen.dart';
 import 'package:auspower_flutter/view/homescreen/screen/company_screen.dart';
+import 'package:auspower_flutter/view/homescreen/widgets/report_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:auspower_flutter/common/widgets/text.dart';
 import 'package:auspower_flutter/constants/space.dart';
@@ -30,113 +33,180 @@ class _SheetViewScreenState extends State<SheetViewScreen> {
     'Grid View'
   ]; // Dynamic list of tab titles
 
+  Map selectedIpAddress = {};
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((t) {
+      PowerConsumptionRepository().getIpaddress(context,
+          plantId: widget.companyData.plantId.toString());
+    });
+    super.initState();
+  }
+
   // This is used to toggle the content based on the selected index
 
   @override
   Widget build(BuildContext context) {
     logger.f(widget.companyData.toJson());
-    return Scaffold(
-      appBar: CommonAppBar(
-        title: "Meter Matrix",
-        leading: InkWell(
-            onTap: () => Navigator.pop(context),
-            child: const Icon(Icons.arrow_back_ios)),
-      ),
-      body: SafeArea(
-        child: RefreshIndicator(
-          color: Palette.primary,
-          onRefresh: () async {
-            TableRepository().gettableData(context,
-                plantId: widget.companyData.plantId.toString());
-          },
-          child: Column(
-            children: [
-              const HeightFull(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.center, // Center the row horizontally
-                  children: List.generate(tabTitles.length, (index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0), // Add space between tabs
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedIndex = index; // Update the selected tab
-                          });
-                        },
-                        child: Container(
+    return Consumer<PowerConsumptionProvider>(
+      builder: (context, ip, child) {
+        return Scaffold(
+          appBar: CommonAppBar(
+            title: "Meter Matrix",
+            leading: InkWell(
+                onTap: () => Navigator.pop(context),
+                child: const Icon(Icons.arrow_back_ios)),
+          ),
+          body: SafeArea(
+            child: RefreshIndicator(
+              color: Palette.primary,
+              onRefresh: () async {
+                TableRepository().gettableData(
+                  context,
+                  params: {
+                    "plant_id": widget.companyData.plantId.toString(),
+                    "group_for": 'regular',
+                    "groupby": 'meter',
+                    "period_id": 'cur_shift',
+                  },
+                );
+              },
+              child: Column(
+                children: [
+                  const HeightFull(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment
+                          .center, // Center the row horizontally
+                      children: List.generate(tabTitles.length, (index) {
+                        return Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 10),
-                          decoration: BoxDecoration(
-                            color: _selectedIndex == index
-                                ? Palette.primary
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(32),
-                            border: Border.all(
-                              color: _selectedIndex == index
-                                  ? Palette.primary
-                                  : Palette.grey,
+                              horizontal: 10.0), // Add space between tabs
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedIndex =
+                                    index; // Update the selected tab
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: _selectedIndex == index
+                                    ? Palette.primary
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(32),
+                                border: Border.all(
+                                  color: _selectedIndex == index
+                                      ? Palette.primary
+                                      : Palette.grey,
+                                ),
+                              ),
+                              child: Text(
+                                tabTitles[index].toUpperCase(),
+                                style: TextStyle(
+                                  color: _selectedIndex == index
+                                      ? Colors.white
+                                      : Palette.dark,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
-                          child: Text(
-                            tabTitles[index].toUpperCase(),
-                            style: TextStyle(
-                              color: _selectedIndex == index
-                                  ? Colors.white
-                                  : Palette.dark,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        );
+                      }),
+                    ),
+                  ),
+                  const HeightFull(),
+                  if (_selectedIndex == 0)
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: ContainerListDialogManualData(
+                            data: selectedIpAddress,
+                            colors: Palette.pureWhite,
+                            hint: "Filter By Ip Address",
+                            fun: () {
+                              commonDialog(
+                                  context,
+                                  DropdownDialogList(
+                                    courses: ip.ipAddress,
+                                    isSearch: true,
+                                    dropdownKey: "ip_address",
+                                    hint: "Ip Address",
+                                    onSelected: (val) {
+                                      selectedIpAddress = val as Map;
+                                      TableRepository().gettableData(
+                                        context,
+                                        params: {
+                                          "plant_id": widget.companyData.plantId
+                                              .toString(),
+                                          "group_for": 'regular',
+                                          "groupby": 'meter',
+                                          "period_id": 'cur_shift',
+                                          "converter_id":
+                                              selectedIpAddress['converter_id'],
+                                        },
+                                      );
+                                      setState(() {});
+                                    },
+                                    head: "Select Ip Address",
+                                  ));
+                            },
+                            keys: 'ip_address',
                           ),
                         ),
-                      ),
-                    );
-                  }),
-                ),
+                        const HeightFull(),
+                      ],
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const TextCustom("Total Meters: "),
+                            TextCustom("${widget.companyData.meterCount}",
+                                color: Colors.blueAccent,
+                                fontWeight: FontWeight.bold),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const TextCustom("On Meters: "),
+                            TextCustom("${widget.companyData.nocomNCount}",
+                                color: Palette.greenAccent,
+                                fontWeight: FontWeight.bold),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const TextCustom("Off Meters: "),
+                            TextCustom("${widget.companyData.nocomSCount}",
+                                color: Colors.red, fontWeight: FontWeight.bold),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const HeightFull(),
+                  ip.isLoading
+                      ? const Loader()
+                      : Expanded(
+                          child: _selectedIndex == 0
+                              ? const SheetViewWidget()
+                              : const GridViewWidget())
+                ],
               ),
-              const HeightFull(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        const TextCustom("Total Meters: "),
-                        TextCustom("${widget.companyData.meterCount}",
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.bold),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const TextCustom("On Meters: "),
-                        TextCustom("${widget.companyData.nocomNCount}",
-                            color: Palette.greenAccent,
-                            fontWeight: FontWeight.bold),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const TextCustom("Off Meters: "),
-                        TextCustom("${widget.companyData.nocomSCount}",
-                            color: Colors.red, fontWeight: FontWeight.bold),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const HeightFull(),
-              Expanded(
-                  child: _selectedIndex == 0
-                      ? const SheetViewWidget()
-                      : const GridViewWidget())
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

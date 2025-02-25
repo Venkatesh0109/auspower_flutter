@@ -175,7 +175,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
   }
 
   // Function to send a test notification
-  void _sendTestNotification() async {
+  void sendTestNotification() async {
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
       'test_channel_id',

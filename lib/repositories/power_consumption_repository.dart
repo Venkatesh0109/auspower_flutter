@@ -184,6 +184,21 @@ class PowerConsumptionRepository {
     powerProvider.energyAnalysis = EnergyAnalysisModel.fromJson(jsonObj);
     return true;
   }
+  Future<bool> getIpaddress(BuildContext context,
+      {required String plantId}) async {
+    logger.f(plantId);
+    // powerProvider.isLoading = true;
+    ResponseData response =
+        await APIService().post(context, "communication_status/", body: {"plant_id":plantId});
+    // powerProvider.isLoading = false;
+    if (response.hasError) return false;
+    // final jsonObj = response.data;
+    logger.i(response.data);
+    powerProvider.getIpAddres(response.data['data']);
+
+    // powerProvider.energyAnalysis = EnergyAnalysisModel.fromJson(jsonObj);
+    return true;
+  }
 
   Future<bool> saveEnergyEntry(BuildContext context,
       {required Map<String, dynamic> params}) async {

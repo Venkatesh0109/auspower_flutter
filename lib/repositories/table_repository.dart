@@ -14,15 +14,10 @@ class TableRepository {
   ///Declare the [APIService] as [_api] with the [_prefixUrl] for the Authentication.
 
   Future<bool> gettableData(BuildContext context,
-      {required String plantId}) async {
+      {required Map<String,dynamic> params}) async {
     tableProvider.isLoading = true;
     ResponseData response =
-        await APIService().post(context, "current_power/", body: {
-      "plant_id": plantId,
-      "group_for": 'regular',
-      "groupby": 'meter',
-      "period_id": 'cur_shift',
-    });
+        await APIService().post(context, "current_power/", body: params);
     tableProvider.isLoading = false;
 
     if (response.hasError) return false;
@@ -30,7 +25,7 @@ class TableRepository {
         CurrentPowerTableData().fromJsonList(response.data['data']);
     tableProvider.data =
         EmployeeDataSource(employeeData: tableProvider.currentpowerTableData);
-    String message = response.data['message'] ?? '';
+    // String message = response.data['message'] ?? '';
 
     // if (message.isNotEmpty) showMessage(message);
     return true;

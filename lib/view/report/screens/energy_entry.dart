@@ -242,6 +242,7 @@ class _EnergyEntryScreenState extends State<EnergyEntryScreen> {
                     ButtonPrimary(
                         onPressed: campus.isEmpty
                             ? () {
+                                // ignore: void_checks
                                 return showMessage("Kindly Select Campus");
                               }
                             : () {

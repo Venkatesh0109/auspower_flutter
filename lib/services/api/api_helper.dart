@@ -20,8 +20,8 @@ class APIHelper {
         showMessage(message, duration: const Duration(seconds: 3));
       }
     } else if (responseData is Map) {
-      bool isError = responseData["iserror"] ?? true;
-      String message = responseData["message"] ?? 'Unknown error';
+      // bool isError = responseData["iserror"] ?? true;
+      // String message = responseData["message"] ?? 'Unknown error';
 
       // showMessage(message);
     } else {

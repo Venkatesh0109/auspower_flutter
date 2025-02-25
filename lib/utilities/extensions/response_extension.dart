@@ -6,7 +6,7 @@ extension ResponseExtension on ResponseData {
       return false;
     }
     if (data["iserror"]) return true;
-    String errMsg = data['message'] ?? '';
+    // String errMsg = data['message'] ?? '';
     // if (errMsg.isNotEmpty) showMessage(errMsg);
     return true;
   }

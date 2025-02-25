@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:auspower_flutter/common/widgets/buttons.dart';
 import 'package:auspower_flutter/common/widgets/text.dart';
-import 'package:auspower_flutter/constants/keys.dart';
 import 'package:auspower_flutter/constants/size_unit.dart';
 import 'package:auspower_flutter/constants/space.dart';
 import 'package:auspower_flutter/theme/palette.dart';
@@ -97,6 +96,7 @@ class MultiselectDialogList extends StatefulWidget {
     this.isSelect = false,
   });
 
+  // ignore: prefer_typing_uninitialized_variables
   final courses, selectedList;
   final String dropdownKey;
   final Function(Object) onSelected;
@@ -278,7 +278,7 @@ class DropdownDialogList extends StatefulWidget {
       {super.key,
       required this.courses,
       required this.dropdownKey,
-       this.dropdownKey1,
+       this.dropdownKey1="",
       required this.hint,
       required this.onSelected,
       required this.head,
@@ -399,7 +399,6 @@ class ContainerListDialogManualData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logger.f(data?[key1]);
     return InkWell(
       onTap: fun,
       child: Container(
@@ -542,7 +541,7 @@ Future<void> pickDate(
   );
 
   String formattedDate =
-      DateFormat('dd-MM-yyyy').format(pickedDate); // Format the date
+      DateFormat('dd-MM-yyyy').format(pickedDate!); // Format the date
   onDatePicked(formattedDate); // Pass the formatted date back
 }
 
