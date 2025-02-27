@@ -60,43 +60,11 @@ class AuthRepository {
     }
   }
 
-  Future<bool> register(BuildContext context, {params}) async {
-    authProvider.isLoading = true;
-    ResponseData responseData =
-        await _api.post(context, 'register', params: params.toJson());
-    authProvider.isLoading = false;
-    if (responseData.hasError) return false;
-    String message = responseData.data['message'] ?? '';
-    saveCreds(context, responseData);
-    // navigateHome(context);
-    if (message.isNotEmpty) showMessage(message);
-    return true;
-  }
-
-  Future<bool> refresh(BuildContext context) async {
-    authProvider.isLoading = true;
-    ResponseData responseData = await _api.get(context, 'refresh');
-    authProvider.isLoading = false;
-    if (responseData.hasError) return false;
-    saveCreds(context, responseData);
-    return true;
-  }
-
-  Future<bool> logout(BuildContext context) async {
-    authProvider.isLoading = true;
-    ResponseData responseData = await _api.post(context, 'logout');
-    authProvider.isLoading = false;
-    if (responseData.hasError) return false;
-    clearCreds();
-    String message = responseData.data['message'] ?? '';
-    if (message.isNotEmpty) showMessage(message);
-    // navigateLogin(context);
-    return true;
-  }
-
   void saveCreds(BuildContext context, ResponseData responseData) {
     AuthUser user = AuthUser.fromJson(responseData.data['data'][0] ?? {});
     storage.write(key: StorageConstants.authCreds, value: jsonEncode(user));
+    logger.e(user.notificationTopic);
+    supscripeTopic(context, user.notificationTopic);
 
     authProvider.user = user;
     authProvider.token = responseData.data['access_token'] ?? '';
@@ -112,8 +80,6 @@ class AuthRepository {
     } else {
       Navigation().pushRemoveUntil(context, const CompanyScreen());
     }
-    supscripeTopic(context, authProvider.user?.notificationTopic ?? '');
-    // supscripeTopic(context, "1_1_1_2");
     CompanyRepository()
         .getCompanyList(context, campusId: user.campusId.toString());
   }

@@ -89,11 +89,10 @@ class CompanyRepository {
       'groupby': 'plant',
       'group_for': 'regular',
       "report_for": 'cumulative',
-      // "campus_id": campusId,
-      // "company_id": companyId,
+      "campus_id": campusId,
+      "company_id": companyId,
       "bu_id": buId
     };
-    // logger.w(body);
 
     companyProvider.isLoading = true;
     ResponseData response =

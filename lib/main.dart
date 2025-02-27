@@ -41,11 +41,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   final dateTime = DateTime.now();
   final formattedDateTime = DateFormat("dd-MM-yyyy HH:mm:ss").format(dateTime);
-
+  logger.f(message.notification!.title);
+  logger.f(message.notification!.body);
   SqlDbRepository().createItem(
     NotificationModel(
-      message.notification?.title ?? "No Title",
-      message.notification?.body ?? "No Body",
+      message.notification!.title ?? "",
+      message.notification!.body ?? "",
       formattedDateTime,
     ),
   );
@@ -90,7 +91,8 @@ void main() async {
     requestBadgePermission: true,
     requestSoundPermission: true,
   );
-  const settings = InitializationSettings(android: androidSetting, iOS: iOSSetting);
+  const settings =
+      InitializationSettings(android: androidSetting, iOS: iOSSetting);
 
   flutterLocalNotificationsPlugin.initialize(
     settings,
@@ -101,6 +103,18 @@ void main() async {
 
   /// 🔸 Foreground Message Handler
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    final dateTime = DateTime.now();
+    final formattedDateTime =
+        DateFormat("dd-MM-yyyy HH:mm:ss").format(dateTime);
+    logger.f(message.notification!.title);
+    logger.f(message.notification!.body);
+    SqlDbRepository().createItem(
+      NotificationModel(
+        message.notification!.title ?? "",
+        message.notification!.body ?? "",
+        formattedDateTime,
+      ),
+    );
     _showNotification(message);
   });
 
@@ -149,8 +163,7 @@ void _showNotification(RemoteMessage message) {
           presentAlert: true,
           presentBadge: true,
           presentSound: true,
-                    sound: 'custom_sound.caf', // 🔹 For iOS
-
+          sound: 'custom_sound.caf', // 🔹 For iOS
         ),
       ),
     );
@@ -183,7 +196,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           theme: lightTheme,
           home: const SplashScreen(),
           localizationsDelegates: const [
-            MonthYearPickerLocalizations.delegate, // Required for month-year picker
+            MonthYearPickerLocalizations
+                .delegate, // Required for month-year picker
           ],
           themeMode: themeManager.themeMode,
           scaffoldMessengerKey: snackbarKey,

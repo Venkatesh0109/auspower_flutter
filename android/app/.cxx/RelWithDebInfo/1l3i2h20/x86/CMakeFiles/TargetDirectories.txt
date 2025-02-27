@@ -1,0 +1,2 @@
+/Users/iot/Downloads/auspower_flutter/android/app/.cxx/RelWithDebInfo/1l3i2h20/x86/CMakeFiles/edit_cache.dir
+/Users/iot/Downloads/auspower_flutter/android/app/.cxx/RelWithDebInfo/1l3i2h20/x86/CMakeFiles/rebuild_cache.dir
