@@ -18,7 +18,9 @@ import 'package:auspower_flutter/view/energy_analysis/screens/energy_analysis_sc
 import 'package:auspower_flutter/view/homescreen/screen/power_consumption.dart';
 import 'package:auspower_flutter/view/homescreen/widgets/logout_dialog.dart';
 import 'package:auspower_flutter/view/homescreen/widgets/report_widgets.dart';
-import 'package:auspower_flutter/view/report/screens/energy_entry.dart';
+import 'package:auspower_flutter/view/activity/screens/energy_entry.dart';
+import 'package:auspower_flutter/view/report/screens/meter_reset_report.dart';
+import 'package:auspower_flutter/view/report/screens/power_factor_variation_report.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -126,6 +128,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
       'img': LocalImages.report,
       'children': [
         {'id': 1, 'title': 'Power Report', 'onTap': const PowerConsumption()},
+        {
+          'id': 2,
+          'title': 'Meter Reset Report',
+          'onTap': const MeterResetReportScreen()
+        },
+        {
+          'id': 3,
+          'title': 'Power Factor Variation Report',
+          'onTap': const PowerFactorVariationReport()
+        },
         // {'id': 1, 'title': 'Text Report', 'onTap': TextSearch()},
         // {
         //   'id': 2,

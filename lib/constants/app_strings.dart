@@ -4,7 +4,7 @@ abstract class AppStrings {
   /// App name
   static const String appName = "Auspower";
 
-  // static const String _local = "http://192.168.128.1:5102";
+  // static const String _local = "http://192.168.128.1:5z102";
   // static const String _server = "https://backendemsdemo.auswegprime.com";
   // static const String _server = "https://backendemsproductdemo.auswegprime.com";
   // static const String _server = "http://10.0.23.210:5102";

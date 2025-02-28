@@ -1,4 +1,5 @@
 import 'package:auspower_flutter/constants/keys.dart';
+import 'package:auspower_flutter/providers/analysis_provider.dart';
 import 'package:auspower_flutter/providers/auth_provider.dart';
 import 'package:auspower_flutter/providers/company_provider.dart';
 import 'package:auspower_flutter/providers/filter_store_provider.dart';
@@ -6,7 +7,6 @@ import 'package:auspower_flutter/providers/info_provider.dart';
 import 'package:auspower_flutter/providers/power_consumption_provider.dart';
 import 'package:auspower_flutter/providers/profile_provider.dart';
 import 'package:auspower_flutter/providers/sql_db_provider.dart';
-import 'package:auspower_flutter/providers/subscription_provider.dart';
 import 'package:auspower_flutter/providers/table_provider.dart';
 import 'package:auspower_flutter/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
@@ -19,17 +19,16 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider<InfoProvider>(create: (context) => InfoProvider()),
   ChangeNotifierProvider<ProfileProvider>(
       create: (context) => ProfileProvider()),
-  ChangeNotifierProvider<SubscriptionProvider>(
-      create: (context) => SubscriptionProvider()),
   ChangeNotifierProvider<TableProvider>(create: (context) => TableProvider()),
   ChangeNotifierProvider<PowerConsumptionProvider>(
       create: (context) => PowerConsumptionProvider()),
   ChangeNotifierProvider<CompanyProvider>(
       create: (context) => CompanyProvider()),
-  ChangeNotifierProvider<SqlDbProvider>(
-      create: (context) => SqlDbProvider()),
+  ChangeNotifierProvider<SqlDbProvider>(create: (context) => SqlDbProvider()),
   ChangeNotifierProvider<FilterStoreProvider>(
       create: (context) => FilterStoreProvider()),
+  ChangeNotifierProvider<AnalysisProvider>(
+      create: (context) => AnalysisProvider()),
 ];
 
 var themeManager =
@@ -43,9 +42,6 @@ var infoProvider =
 
 var profileProvider =
     Provider.of<ProfileProvider>(mainKey.currentContext!, listen: false);
-
-var subscriptionProvider =
-    Provider.of<SubscriptionProvider>(mainKey.currentContext!, listen: false);
 var tableProvider =
     Provider.of<TableProvider>(mainKey.currentContext!, listen: false);
 var powerProvider = Provider.of<PowerConsumptionProvider>(
@@ -57,3 +53,5 @@ var sqlProvider =
     Provider.of<SqlDbProvider>(mainKey.currentContext!, listen: false);
 var filterProvider =
     Provider.of<FilterStoreProvider>(mainKey.currentContext!, listen: false);
+var analysisProvider =
+    Provider.of<AnalysisProvider>(mainKey.currentContext!, listen: false);
