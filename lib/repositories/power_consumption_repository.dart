@@ -140,7 +140,7 @@ class PowerConsumptionRepository {
 
   Future<bool> getEnergyEntry(BuildContext context,
       {required Map<String, dynamic> params, required bool isDaily}) async {
-    logger.f(params);
+    // logger.f(params);
 
     powerProvider.isLoading = true;
     ResponseData response = await APIService()
@@ -150,7 +150,7 @@ class PowerConsumptionRepository {
     if (response.hasError) return false;
     List<Map<String, dynamic>> data =
         List<Map<String, dynamic>>.from(response.data['data']);
-    logger.w(data);
+    // logger.w(data);
 
     powerProvider.getEnergyEntryList(data, isDaily);
 
@@ -164,16 +164,19 @@ class PowerConsumptionRepository {
     ResponseData response =
         await APIService().post(context, "current_power/", body: params);
     powerProvider.isLoading = false;
+    logger.i(response.data);
+    logger.i(response.isError);
+    logger.i(response.statusCode);
+
     if (response.hasError) return false;
     final jsonObj = response.data;
-    // logger.i(response.data["data"]);
     powerProvider.energyAnalysis = EnergyAnalysisModel.fromJson(jsonObj);
     return true;
   }
 
   Future<bool> getEnergyAnalysisChart(BuildContext context,
       {required Map<String, dynamic> params}) async {
-    logger.f(params);
+    logger.w(params);
     // powerProvider.isLoading = true;
     ResponseData response =
         await APIService().post(context, "current_power/", body: params);
@@ -184,16 +187,17 @@ class PowerConsumptionRepository {
     powerProvider.energyAnalysis = EnergyAnalysisModel.fromJson(jsonObj);
     return true;
   }
+
   Future<bool> getIpaddress(BuildContext context,
       {required String plantId}) async {
-    logger.f(plantId);
+    // logger.f(plantId);
     // powerProvider.isLoading = true;
-    ResponseData response =
-        await APIService().post(context, "communication_status/", body: {"plant_id":plantId});
+    ResponseData response = await APIService()
+        .post(context, "communication_status/", body: {"plant_id": plantId});
     // powerProvider.isLoading = false;
     if (response.hasError) return false;
     // final jsonObj = response.data;
-    logger.i(response.data);
+    // logger.i(response.data);
     powerProvider.getIpAddres(response.data['data']);
 
     // powerProvider.energyAnalysis = EnergyAnalysisModel.fromJson(jsonObj);

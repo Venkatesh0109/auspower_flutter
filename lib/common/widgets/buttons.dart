@@ -41,7 +41,7 @@ class ButtonOutlined extends OutlinedButton {
       bool isLoading = false})
       : super(
             child: Padding(
-              padding: const EdgeInsets.all(SizeUnit.lg),
+              padding: const EdgeInsets.all(SizeUnit.sm),
               child: isLoading
                   ? const Loader()
                   : Row(

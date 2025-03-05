@@ -184,24 +184,26 @@ class _EnergyAnalysisScreenState extends State<EnergyAnalysisScreen> {
                               params.addAll(
                                   {"from_date": fromDate, "to_date": toDate});
                             }
-                            logger.w(params);
+                            // logger.w(params);
                             PowerConsumptionRepository()
-                                .getEnergyAnalysis(context, params: params);
-                          });
-                          PowerConsumptionRepository()
-                              .getEnergyAnalysisChart(context, params: {
-                            "group_for": "regular",
-                            "report_for": "cumulative",
-                            "period_id":
-                                selectedEnergy["period_id"] ?? "cur_shift",
-                            "groupby": "meter",
-                            "plant_id": "0",
-                            "company_id": "0",
-                            "meter_id": filter.meter?["meter_id"] ?? "1",
-                            "is_minmax": "yes"
-                          }).then((value1) {
-                            dataSource = EnergyAnalysisGridSource(
-                                value.energyAnalysis?.data ?? []);
+                                .getEnergyAnalysis(context, params: params)
+                                .then((v) {
+                              PowerConsumptionRepository()
+                                  .getEnergyAnalysisChart(context, params: {
+                                "group_for": "regular",
+                                "report_for": "cumulative",
+                                "period_id":
+                                    selectedEnergy["period_id"] ?? "cur_shift",
+                                "groupby": "meter",
+                                "plant_id": "0",
+                                "company_id": "0",
+                                "meter_id": filter.meter?["meter_id"] ?? "1",
+                                "is_minmax": "yes"
+                              }).then((value1) {
+                                dataSource = EnergyAnalysisGridSource(
+                                    value.energyAnalysis?.data ?? []);
+                              });
+                            });
                           });
                         },
                         child: Center(

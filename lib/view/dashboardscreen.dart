@@ -53,151 +53,130 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
   }
 
-  DateTime? lastBackPressTime;
 
   @override
   Widget build(BuildContext context) {
     return Consumer2<AuthProvider, TableProvider>(
       builder: (context, auth, value, child) {
-        return WillPopScope(
-          onWillPop: () async {
-            final now = DateTime.now();
-            bool allowPop = false;
-            if (lastBackPressTime == null ||
-                now.difference(lastBackPressTime!) >
-                    const Duration(seconds: 1)) {
-              lastBackPressTime = now;
-              Fluttertoast.showToast(
-                msg: "Press back again to exit",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-              );
-              // LayoutRepository().changeScreen(0, context);
-            } else {
-              allowPop = true;
-            }
-            return Future<bool>.value(allowPop);
-          }, //
-          child: Scaffold(
-              backgroundColor: Palette.pureWhite,
-              appBar: CommonAppBar(
-                title: "DashBoard",
-                leading: InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.arrow_back_ios)),
-                action: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Row(
-                    children: [
-                      InkWell(
-                          onTap: () {
-                            Navigation().push(context,
-                                FadeRoute(page: const NotificationScreen()));
-                          },
-                          child:
-                              const Icon(Icons.notifications_active_outlined)),
-                    ],
-                  ),
+        return Scaffold(
+            backgroundColor: Palette.pureWhite,
+            appBar: CommonAppBar(
+              title: "DashBoard",
+              leading: InkWell(
+                  onTap: () => Navigator.pop(context),
+                  child: const Icon(Icons.arrow_back_ios)),
+              action: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Row(
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Navigation().push(context,
+                              FadeRoute(page: const NotificationScreen()));
+                        },
+                        child:
+                            const Icon(Icons.notifications_active_outlined)),
+                  ],
                 ),
               ),
-              body: Padding(
-                padding: const EdgeInsets.all(12),
-                child: ListView(children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: AnimatedCard(
-                          onTap: () {
-                            Navigation().push(
-                                context,
-                                FadeRoute(
-                                    page: SheetViewScreen(
-                                        companyData: widget.companyData ??
-                                            PlantListData())));
-                          },
-                          color: const Color.fromARGB(255, 254, 214, 186),
-                          head: "Meter Matrix",
-                          image: LocalImages.sheetView,
-                        ),
-                      ),
-                      const WidthFull(),
-                      Expanded(
-                        child: AnimatedCard(
-                          onTap: () {
-                            Navigation().push(context,
-                                FadeRoute(page: const MeterDataChart()));
-                          },
-                          color: const Color(0xffEEDEF6),
-                          head: "Top Consumption",
-                          image: LocalImages.consumption,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const HeightFull(),
-                  const TextCustom(
-                    "Analysis",
-                    color: Palette.dark,
-                    fontWeight: FontWeight.bold,
-                    size: 17,
-                  ),
-                  const HeightHalf(),
-                  AnimatedCard(
-                    onTap: () {
-                      Navigation().push(context,
-                          FadeRoute(page: const EnergyAnalysisScreen()));
-                    },
-                    color: const Color.fromARGB(255, 186, 236, 254),
-                    head: "Energy Analysis",
-                    image: LocalImages.energyAnalysis,
-                  ),
-                  const HeightFull(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const TextCustom(
-                        "Activity",
-                        color: Palette.dark,
-                        fontWeight: FontWeight.bold,
-                        size: 17,
-                      ),
-                      const HeightHalf(),
-                      AnimatedCard(
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(12),
+              child: ListView(children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: AnimatedCard(
                         onTap: () {
                           Navigation().push(
                               context,
                               FadeRoute(
-                                  page: EnergyEntryScreen(
-                                      campusId: widget.companyData?.campusId
-                                              .toString() ??
-                                          "")));
+                                  page: SheetViewScreen(
+                                      companyData: widget.companyData ??
+                                          PlantListData())));
                         },
-                        color: const Color.fromARGB(255, 243, 254, 186),
-                        head: "Energy Entry",
-                        image: LocalImages.energyEntry,
+                        color: const Color.fromARGB(255, 254, 214, 186),
+                        head: "Meter Matrix",
+                        image: LocalImages.sheetView,
                       ),
-                      const HeightFull(),
-                    ],
-                  ),
-                  const TextCustom(
-                    "Report",
-                    color: Palette.dark,
-                    fontWeight: FontWeight.bold,
-                    size: 17,
-                  ),
-                  const HeightHalf(),
-                  AnimatedCard(
-                    onTap: () {
-                      Navigation().push(
-                          context, FadeRoute(page: const PowerConsumption()));
-                    },
-                    color: const Color.fromARGB(255, 254, 186, 186),
-                    head: "Power Consumption",
-                    image: LocalImages.powerconsumption,
-                  ),
-                ]),
-              )),
-        );
+                    ),
+                    const WidthFull(),
+                    Expanded(
+                      child: AnimatedCard(
+                        onTap: () {
+                          Navigation().push(context,
+                              FadeRoute(page: const MeterDataChart()));
+                        },
+                        color: const Color(0xffEEDEF6),
+                        head: "Top Consumption",
+                        image: LocalImages.consumption,
+                      ),
+                    ),
+                  ],
+                ),
+                const HeightFull(),
+                const TextCustom(
+                  "Analysis",
+                  color: Palette.dark,
+                  fontWeight: FontWeight.bold,
+                  size: 17,
+                ),
+                const HeightHalf(),
+                AnimatedCard(
+                  onTap: () {
+                    Navigation().push(context,
+                        FadeRoute(page: const EnergyAnalysisScreen()));
+                  },
+                  color: const Color.fromARGB(255, 186, 236, 254),
+                  head: "Energy Analysis",
+                  image: LocalImages.energyAnalysis,
+                ),
+                const HeightFull(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const TextCustom(
+                      "Activity",
+                      color: Palette.dark,
+                      fontWeight: FontWeight.bold,
+                      size: 17,
+                    ),
+                    const HeightHalf(),
+                    AnimatedCard(
+                      onTap: () {
+                        Navigation().push(
+                            context,
+                            FadeRoute(
+                                page: EnergyEntryScreen(
+                                    campusId: widget.companyData?.campusId
+                                            .toString() ??
+                                        "")));
+                      },
+                      color: const Color.fromARGB(255, 243, 254, 186),
+                      head: "Energy Entry",
+                      image: LocalImages.energyEntry,
+                    ),
+                    const HeightFull(),
+                  ],
+                ),
+                const TextCustom(
+                  "Report",
+                  color: Palette.dark,
+                  fontWeight: FontWeight.bold,
+                  size: 17,
+                ),
+                const HeightHalf(),
+                AnimatedCard(
+                  onTap: () {
+                    Navigation().push(
+                        context, FadeRoute(page: const PowerConsumption()));
+                  },
+                  color: const Color.fromARGB(255, 254, 186, 186),
+                  head: "Power Consumption",
+                  image: LocalImages.powerconsumption,
+                ),
+              ]),
+            ));
       },
     );
   }

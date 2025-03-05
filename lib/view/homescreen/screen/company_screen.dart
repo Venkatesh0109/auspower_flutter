@@ -17,6 +17,7 @@ import 'package:auspower_flutter/view/homescreen/widgets/drawer.dart';
 import 'package:auspower_flutter/view/notification/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class CompanyScreen extends StatefulWidget {
@@ -37,140 +38,166 @@ class _CompanyScreenState extends State<CompanyScreen> {
     super.initState();
   }
 
+  DateTime? lastBackPressTime;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: homeKey,
-      drawer: const CustomDrawer(),
-      appBar: CommonAppBar(
-        title: "Company List",
-        action: Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: Row(
-            children: [
-              InkWell(
-                  onTap: () {
-                    Navigation().push(
-                        context, FadeRoute(page: const NotificationScreen()));
-                  },
-                  child: const Icon(Icons.notifications_active_outlined)),
-            ],
+    return WillPopScope(
+      onWillPop: () async {
+        final now = DateTime.now();
+        bool allowPop = false;
+        if (lastBackPressTime == null ||
+            now.difference(lastBackPressTime!) > const Duration(seconds: 1)) {
+          lastBackPressTime = now;
+          Fluttertoast.showToast(
+            msg: "Press back again to exit",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+          );
+          // LayoutRepository().changeScreen(0, context);
+        } else {
+          allowPop = true;
+        }
+        return Future<bool>.value(allowPop);
+      },
+      child: Scaffold(
+        key: homeKey,
+        drawer: const CustomDrawer(),
+        appBar: CommonAppBar(
+          title: "Company List",
+          action: Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Row(
+              children: [
+                InkWell(
+                    onTap: () {
+                      Navigation().push(
+                          context, FadeRoute(page: const NotificationScreen()));
+                    },
+                    child: const Icon(Icons.notifications_active_outlined)),
+              ],
+            ),
           ),
+          leading: InkWell(
+              onTap: () {
+                homeKey.currentState!.openDrawer();
+              },
+              child: const Icon(Icons.menu)),
         ),
-        leading: InkWell(
-            onTap: () {
-              homeKey.currentState!.openDrawer();
-            },
-            child: const Icon(Icons.menu)),
-      ),
-      body: SafeArea(
-          child: RefreshIndicator(
-        onRefresh: () async {
-          CompanyRepository().getCompanyList(context, campusId: '');
-        },
-        child: Consumer<CompanyProvider>(
-          builder: (context, company, child) {
-            List<CompanyListData> companyList = company.companyList?.data ?? [];
-            return company.isLoading || company.companyList == null
-                ? const ShimmerList()
-                : companyList.isEmpty
-                    ? const EmptyScreen()
-                    : ListView(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        children: [
-                          ListView.builder(
-                            itemCount: companyList.length,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              CompanyListData companyData = companyList[index];
-                              var totalKwh = (companyData.pmCommonKwh ?? 0.0) +
-                                  (companyData.pmEquipmentKwh ?? 0.0);
+        body: SafeArea(
+            child: RefreshIndicator(
+          onRefresh: () async {
+            CompanyRepository().getCompanyList(context, campusId: '');
+          },
+          child: Consumer<CompanyProvider>(
+            builder: (context, company, child) {
+              List<CompanyListData> companyList =
+                  company.companyList?.data ?? [];
+              return company.isLoading || company.companyList == null
+                  ? const ShimmerList()
+                  : companyList.isEmpty
+                      ? const EmptyScreen()
+                      : ListView(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          children: [
+                            ListView.builder(
+                              itemCount: companyList.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                CompanyListData companyData =
+                                    companyList[index];
+                                var totalKwh =
+                                    (companyData.pmCommonKwh ?? 0.0) +
+                                        (companyData.pmEquipmentKwh ?? 0.0);
 
-                              return Column(
-                                children: [
-                                  const HeightFull(),
-                                  InkWell(
-                                    onTap: () {
-                                      // _sendTestNotification();
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => BranchScreen(
-                                            campusId:
-                                                companyData.campusId.toString(),
-                                            companyId: companyData.companyId
-                                                .toString(),
+                                return Column(
+                                  children: [
+                                    const HeightFull(),
+                                    InkWell(
+                                      onTap: () {
+                                        // _sendTestNotification();
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => BranchScreen(
+                                              campusId: companyData.campusId
+                                                  .toString(),
+                                              companyId: companyData.companyId
+                                                  .toString(),
+                                            ),
                                           ),
+                                        );
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          boxShadow: ThemeGuide.primaryShadow,
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                          color: Colors.white,
                                         ),
-                                      );
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(12),
-                                      decoration: BoxDecoration(
-                                        boxShadow: ThemeGuide.primaryShadow,
-                                        borderRadius: BorderRadius.circular(16),
-                                        color: Colors.white,
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TextCustom(
-                                            companyData.companyName ?? "",
-                                            fontWeight: FontWeight.bold,
-                                            color: Palette.primary,
-                                            size: 16,
-                                          ),
-                                          const HeightHalf(),
-                                          RowWidget(
-                                            head1: 'Total KWh',
-                                            head2: 'Utilities KWh',
-                                            value1: "$totalKwh",
-                                            value2:
-                                                "${companyData.pmCommonKwh}",
-                                          ),
-                                          const HeightHalf(),
-                                          RowWidget(
-                                            head1: 'Equipments KWh',
-                                            head2: 'No Of Meters',
-                                            value1:
-                                                "${companyData.pmEquipmentKwh}",
-                                            value2:
-                                                "${companyData.pmMeterCount}",
-                                          ),
-                                          const HeightHalf(),
-                                          RowWidget(
-                                            head1: 'OFF',
-                                            head2: 'RUN',
-                                            head3: "IDLE",
-                                            value1: "${companyData.offKwh}",
-                                            value2: "${companyData.onLoadKwh}",
-                                            value3: "${companyData.idleKwh}",
-                                            isThree: true,
-                                          ),
-                                          const HeightHalf(),
-                                          RowWidget(
-                                            head1: 'On Status',
-                                            head2: 'Off Status',
-                                            value1:
-                                                "${companyData.pmNocomNCount}",
-                                            value2:
-                                                "${companyData.pmNocomSCount}",
-                                          ),
-                                        ],
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            TextCustom(
+                                              companyData.companyName ?? "",
+                                              fontWeight: FontWeight.bold,
+                                              color: Palette.primary,
+                                              size: 16,
+                                            ),
+                                            const HeightHalf(),
+                                            RowWidget(
+                                              head1: 'Total KWh',
+                                              head2: 'Utilities KWh',
+                                              value1: "$totalKwh",
+                                              value2:
+                                                  "${companyData.pmCommonKwh}",
+                                            ),
+                                            const HeightHalf(),
+                                            RowWidget(
+                                              head1: 'Equipments KWh',
+                                              head2: 'No Of Meters',
+                                              value1:
+                                                  "${companyData.pmEquipmentKwh}",
+                                              value2:
+                                                  "${companyData.pmMeterCount}",
+                                            ),
+                                            const HeightHalf(),
+                                            RowWidget(
+                                              head1: 'OFF',
+                                              head2: 'RUN',
+                                              head3: "IDLE",
+                                              value1: "${companyData.offKwh}",
+                                              value2:
+                                                  "${companyData.onLoadKwh}",
+                                              value3: "${companyData.idleKwh}",
+                                              isThree: true,
+                                            ),
+                                            const HeightHalf(),
+                                            RowWidget(
+                                              head1: 'On Status',
+                                              head2: 'Off Status',
+                                              value1:
+                                                  "${companyData.pmNocomNCount}",
+                                              value2:
+                                                  "${companyData.pmNocomSCount}",
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ],
-                      );
-          },
-        ),
-      )),
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
+                        );
+            },
+          ),
+        )),
+      ),
     );
   }
 

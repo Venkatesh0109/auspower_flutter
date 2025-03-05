@@ -48,7 +48,7 @@ class _SheetViewScreenState extends State<SheetViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    logger.f(widget.companyData.toJson());
+    // logger.f(widget.companyData.toJson());
     return Consumer<PowerConsumptionProvider>(
       builder: (context, ip, child) {
         return Scaffold(

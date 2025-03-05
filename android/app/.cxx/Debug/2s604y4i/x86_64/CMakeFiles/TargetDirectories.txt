@@ -1,0 +1,2 @@
+/Users/iot/Downloads/Flutter Projects/Ausweg Projects/auspower_flutter/android/app/.cxx/Debug/2s604y4i/x86_64/CMakeFiles/edit_cache.dir
+/Users/iot/Downloads/Flutter Projects/Ausweg Projects/auspower_flutter/android/app/.cxx/Debug/2s604y4i/x86_64/CMakeFiles/rebuild_cache.dir

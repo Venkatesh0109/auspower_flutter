@@ -111,6 +111,7 @@ class _MeterDataChartState extends State<MeterDataChart>
                           getRandomColor(),
                       dataLabelSettings: const DataLabelSettings(
                         isVisible: true,
+                        // alignment: ChartAlignment.values,
                         textStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,

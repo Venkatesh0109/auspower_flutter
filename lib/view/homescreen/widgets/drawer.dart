@@ -9,6 +9,7 @@ import 'package:auspower_flutter/constants/space.dart';
 import 'package:auspower_flutter/models/auth_user.dart';
 import 'package:auspower_flutter/providers/auth_provider.dart';
 import 'package:auspower_flutter/providers/providers.dart';
+import 'package:auspower_flutter/repositories/analysis_repository.dart';
 import 'package:auspower_flutter/services/route/navigation.dart';
 import 'package:auspower_flutter/services/storage/storage_constants.dart';
 import 'package:auspower_flutter/theme/palette.dart';
@@ -63,6 +64,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       String authDetails =
           await storage.read(key: StorageConstants.authCreds) ?? '';
       authProvider.user = AuthUser.fromJson(jsonDecode(authDetails));
+
       // logger.w(authProvider.user?.toJson());
       // if (authProvider.user?.employeeType != 'Admin' ||
       //     authProvider.user?.employeeType == 'Operator'||authProvider.user?.employeeType == 'Plant') {
@@ -362,21 +364,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: List.generate(
                   list.length,
-                  (e) => InkWell(
-                      onTap: () {
-                        Navigation()
-                            .push(context, FadeRoute(page: list[e]['onTap']));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 44, bottom: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextCustom(list[e]["title"],
-                                fontWeight: FontWeight.w500, size: 13),
-                          ],
+                  (e) => Padding(
+                    padding: const EdgeInsets.only(left: 44, bottom: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigation().push(
+                                context, FadeRoute(page: list[e]['onTap']));
+                          },
+                          child: TextCustom(list[e]["title"],
+                              fontWeight: FontWeight.w500, size: 13),
                         ),
-                      )),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             )

@@ -71,7 +71,7 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom> {
         String input = i ?? '';
         // Checks if the field is optional and input is empty
         if (!widget.isOptional && input.isEmpty) {
-          return "The ${widget.label} is required";
+          return "The ${widget.hint} is required";
         }
         if (!widget.isOptional &&
             widget.keyboardType == TextInputType.emailAddress &&
@@ -97,7 +97,7 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom> {
               color: Palette.dark.withOpacity(.6),
               fontSize: 14,
               fontFamily: "Poppins"),
-          labelText: widget.label,
+          // labelText: widget.label,
           hintText: widget.hint,
           contentPadding: const EdgeInsets.symmetric(
               horizontal: SizeUnit.lg, vertical: SizeUnit.lg),

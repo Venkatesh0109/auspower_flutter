@@ -65,7 +65,7 @@ class _EnergyEntryScreenState extends State<EnergyEntryScreen> {
             "${authProvider.user?.employeeType == "Operator" ? authProvider.user?.campusId : widget.campusId}",
         orElse: () => {},
       );
-      logger.w(selectedMonthYear);
+      // logger.w(selectedMonthYear);
     });
     super.initState();
   }
@@ -87,298 +87,313 @@ class _EnergyEntryScreenState extends State<EnergyEntryScreen> {
             ),
           ),
           body: SafeArea(
-              child: ListView(
+              child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
+              Expanded(
+                child: ListView(
                   children: [
-                    ContainerListDialogManualData(
-                      data: campus,
-                      colors: Palette.pureWhite,
-                      hint: "Select Campus",
-                      fun: () {
-                        commonDialog(
-                            context,
-                            DropdownDialogList(
-                                courses: value.campusData,
-                                dropdownKey: "campus_name",
-                                hint: "Campus",
-                                onSelected: (val) {
-                                  campus = val as Map;
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          ContainerListDialogManualData(
+                            data: campus,
+                            colors: Palette.pureWhite,
+                            hint: "Select Campus",
+                            fun: () {
+                              commonDialog(
+                                  context,
+                                  DropdownDialogList(
+                                      courses: value.campusData,
+                                      dropdownKey: "campus_name",
+                                      hint: "Campus",
+                                      onSelected: (val) {
+                                        campus = val as Map;
 
-                                  setState(() {});
-                                },
-                                head: "Select Campus"));
-                      },
-                      keys: 'campus_name',
-                    ),
-                    const HeightFull(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(tabTitles.length, (index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                setState(() {
-                                  selectedIndex = index;
-                                  campus = {};
-                                  value.energyEnterList.clear();
-                                  modifiedByCont.clear();
-                                  modifiedOnCont.clear();
-                                  createdByCont.clear();
-                                  createdOnCont.clear();
-                                  dataSource = EnergyDataGridSource(
-                                      [], selectedIndex == 0);
+                                        setState(() {});
+                                      },
+                                      head: "Select Campus"));
+                            },
+                            keys: 'campus_name',
+                          ),
+                          const HeightFull(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(tabTitles.length, (index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      setState(() {
+                                        selectedIndex = index;
+                                        campus = {};
+                                        value.energyEnterList.clear();
+                                        modifiedByCont.clear();
+                                        modifiedOnCont.clear();
+                                        createdByCont.clear();
+                                        createdOnCont.clear();
+                                        dataSource = EnergyDataGridSource(
+                                            [], selectedIndex == 0);
+                                      });
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 14, vertical: 10),
+                                    decoration: BoxDecoration(
+                                      color: selectedIndex == index
+                                          ? Palette.primary
+                                          : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(32),
+                                      border: Border.all(
+                                        color: selectedIndex == index
+                                            ? Palette.primary
+                                            : Palette.grey,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      tabTitles[index].toUpperCase(),
+                                      style: TextStyle(
+                                        color: selectedIndex == index
+                                            ? Colors.white
+                                            : Palette.dark,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                          const HeightFull(),
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: TextFormFieldCustom(
+                                      readOnly: true,
+                                      isOptional: true,
+                                      label: "Created On",
+                                      controller: createdOnCont,
+                                      hint: "Created On")),
+                              const WidthFull(),
+                              Expanded(
+                                  child: TextFormFieldCustom(
+                                      readOnly: true,
+                                      label: "Created By",
+                                      isOptional: true,
+                                      controller: createdByCont,
+                                      hint: "Created By")),
+                            ],
+                          ),
+                          const HeightFull(),
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: TextFormFieldCustom(
+                                      readOnly: true,
+                                      isOptional: true,
+                                      label: "Modified On",
+                                      controller: modifiedOnCont,
+                                      hint: "Modified On")),
+                              const WidthFull(),
+                              Expanded(
+                                  child: TextFormFieldCustom(
+                                      readOnly: true,
+                                      label: "Modified By",
+                                      isOptional: true,
+                                      controller: modifiedByCont,
+                                      hint: "Modified By")),
+                            ],
+                          ),
+                          const HeightFull(),
+                          DatePickerDialog(
+                            date: selectedIndex == 0
+                                ? selectedDate
+                                : selectedMonthYear,
+                            hint: selectedIndex == 0
+                                ? "Select a Date"
+                                : "Select a Month & Year",
+                            onPickDate: () async {
+                              if (selectedIndex == 0) {
+                                // Full Date Picker
+                                await pickDate(context, (String? pickedDate) {
+                                  setState(() {
+                                    selectedDate = pickedDate;
+                                  });
                                 });
+                              } else {
+                                // Month-Year Picker
+                                await pickMonthYear(context,
+                                    (String? pickedMonthYear) {
+                                  setState(() {
+                                    selectedMonthYear = pickedMonthYear;
+                                  });
+                                });
+                              }
+                            },
+                            onRemoveDate: () {
+                              setState(() {
+                                if (selectedIndex == 0) {
+                                  selectedDate = null;
+                                } else {
+                                  selectedMonthYear = null;
+                                }
                               });
                             },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 14, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: selectedIndex == index
-                                    ? Palette.primary
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(32),
-                                border: Border.all(
-                                  color: selectedIndex == index
-                                      ? Palette.primary
-                                      : Palette.grey,
-                                ),
-                              ),
-                              child: Text(
-                                tabTitles[index].toUpperCase(),
-                                style: TextStyle(
-                                  color: selectedIndex == index
-                                      ? Colors.white
-                                      : Palette.dark,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                          ),
+                          const HeightFull(),
+                          ButtonPrimary(
+                              onPressed: campus.isEmpty
+                                  ? () {
+                                      // ignore: void_checks
+                                      return showMessage(
+                                          "Kindly Select Campus");
+                                    }
+                                  : () {
+                                      isView = true;
+                                      PowerConsumptionRepository()
+                                          .getEnergyEntry(context,
+                                              params: {
+                                                "mill_date": selectedIndex == 0
+                                                    ? selectedDate
+                                                    : "01-$selectedMonthYear",
+                                                "campus_id":
+                                                    campus["campus_id"],
+                                                "period_type":
+                                                    selectedIndex == 0
+                                                        ? "date"
+                                                        : "month"
+                                              },
+                                              isDaily: selectedIndex == 0)
+                                          .then((onValue) {
+                                        if (value.energyEnterList.isNotEmpty) {
+                                          dataSource = EnergyDataGridSource(
+                                              value.energyEnterList,
+                                              selectedIndex == 0);
+                                          modifiedByCont.text =
+                                              value.energyEnterList[0]
+                                                  ["modified_user"];
+                                          modifiedOnCont.text =
+                                              FormatDate.formattedStr(
+                                                  value.energyEnterList[0]
+                                                          ["modified_on"] ??
+                                                      "");
+                                          createdByCont.text =
+                                              value.energyEnterList[0]
+                                                  ["created_user"];
+                                          createdOnCont.text =
+                                              FormatDate.formattedStr(
+                                                  value.energyEnterList[0]
+                                                          ["created_on"] ??
+                                                      "");
+                                        }
+                                        setState(() {});
+                                      });
+                                    },
+                              label: "View"),
+                        ],
+                      ),
+                    ),
+                    !isView || dataSource.rows.isEmpty
+                        ? const SizedBox()
+                        : SizedBox(
+                            width:
+                                MediaQuery.of(context).size.width, // Full width
+                            height: context.heightQuarter() + 200,
+                            child: SfDataGrid(
+                              source: dataSource,
+                              gridLinesVisibility: GridLinesVisibility.both,
+                              columnWidthMode: ColumnWidthMode.fill,
+                              headerGridLinesVisibility:
+                                  GridLinesVisibility.both,
+                              horizontalScrollPhysics:
+                                  const AlwaysScrollableScrollPhysics(),
+                              verticalScrollPhysics:
+                                  const AlwaysScrollableScrollPhysics(),
+                              columns: selectedIndex == 0
+                                  ? [
+                                      // Daily Entry Columns
+                                      GridColumn(
+                                        columnName: 'energy_source_name',
+                                        width: 200,
+                                        label: Container(
+                                          color: Palette.primary,
+                                          padding: const EdgeInsets.all(16.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            dailyEntry[0]["source"],
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'consumption_total',
+                                        width: 250,
+                                        label: Container(
+                                          color: Palette.primary,
+                                          padding: const EdgeInsets.all(16.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            dailyEntry[1]["source"],
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ]
+                                  : [
+                                      // Monthly Entry Columns
+                                      GridColumn(
+                                        columnName: 'energy_source_name',
+                                        width: 200,
+                                        label: Container(
+                                          color: Palette.primary,
+                                          padding: const EdgeInsets.all(16.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            monthlyEntry[0]["source"],
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        width: 250,
+                                        columnName: 'consumption_total',
+                                        label: Container(
+                                          color: Palette.primary,
+                                          padding: const EdgeInsets.all(16.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            monthlyEntry[1]["source"],
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        width: 250,
+                                        columnName: 'consumption',
+                                        label: Container(
+                                          color: Palette.primary,
+                                          padding: const EdgeInsets.all(16.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            monthlyEntry[2]["source"],
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                             ),
                           ),
-                        );
-                      }),
-                    ),
-                    const HeightFull(),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: TextFormFieldCustom(
-                                readOnly: true,
-                                isOptional: true,
-                                label: "Created On",
-                                controller: createdOnCont,
-                                hint: "Created On")),
-                        const WidthFull(),
-                        Expanded(
-                            child: TextFormFieldCustom(
-                                readOnly: true,
-                                label: "Created By",
-                                isOptional: true,
-                                controller: createdByCont,
-                                hint: "Created By")),
-                      ],
-                    ),
-                    const HeightFull(),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: TextFormFieldCustom(
-                                readOnly: true,
-                                isOptional: true,
-                                label: "Modified On",
-                                controller: modifiedOnCont,
-                                hint: "Modified On")),
-                        const WidthFull(),
-                        Expanded(
-                            child: TextFormFieldCustom(
-                                readOnly: true,
-                                label: "Modified By",
-                                isOptional: true,
-                                controller: modifiedByCont,
-                                hint: "Modified By")),
-                      ],
-                    ),
-                    const HeightFull(),
-                    DatePickerDialog(
-                      date:
-                          selectedIndex == 0 ? selectedDate : selectedMonthYear,
-                      hint: selectedIndex == 0
-                          ? "Select a Date"
-                          : "Select a Month & Year",
-                      onPickDate: () async {
-                        if (selectedIndex == 0) {
-                          // Full Date Picker
-                          await pickDate(context, (String? pickedDate) {
-                            setState(() {
-                              selectedDate = pickedDate;
-                            });
-                          });
-                        } else {
-                          // Month-Year Picker
-                          await pickMonthYear(context,
-                              (String? pickedMonthYear) {
-                            setState(() {
-                              selectedMonthYear = pickedMonthYear;
-                            });
-                          });
-                        }
-                      },
-                      onRemoveDate: () {
-                        setState(() {
-                          if (selectedIndex == 0) {
-                            selectedDate = null;
-                          } else {
-                            selectedMonthYear = null;
-                          }
-                        });
-                      },
-                    ),
-                    const HeightFull(),
-                    ButtonPrimary(
-                        onPressed: campus.isEmpty
-                            ? () {
-                                // ignore: void_checks
-                                return showMessage("Kindly Select Campus");
-                              }
-                            : () {
-                                isView = true;
-                                PowerConsumptionRepository()
-                                    .getEnergyEntry(context,
-                                        params: {
-                                          "mill_date": selectedIndex == 0
-                                              ? selectedDate
-                                              : "01-$selectedMonthYear",
-                                          "campus_id": campus["campus_id"],
-                                          "period_type": selectedIndex == 0
-                                              ? "date"
-                                              : "month"
-                                        },
-                                        isDaily: selectedIndex == 0)
-                                    .then((onValue) {
-                                  if (value.energyEnterList.isNotEmpty) {
-                                    dataSource = EnergyDataGridSource(
-                                        value.energyEnterList,
-                                        selectedIndex == 0);
-                                    modifiedByCont.text = value
-                                        .energyEnterList[0]["modified_user"];
-                                    modifiedOnCont.text =
-                                        FormatDate.formattedStr(
-                                            value.energyEnterList[0]
-                                                    ["modified_on"] ??
-                                                "");
-                                    createdByCont.text = value
-                                        .energyEnterList[0]["created_user"];
-                                    createdOnCont.text =
-                                        FormatDate.formattedStr(
-                                            value.energyEnterList[0]
-                                                    ["created_on"] ??
-                                                "");
-                                  }
-                                  setState(() {});
-                                });
-                              },
-                        label: "View"),
                   ],
                 ),
               ),
-              !isView || dataSource.rows.isEmpty
-                  ? const SizedBox()
-                  : SizedBox(
-                      width: MediaQuery.of(context).size.width, // Full width
-                      height: context.heightQuarter() + 200,
-                      child: SfDataGrid(
-                        source: dataSource,
-                        gridLinesVisibility: GridLinesVisibility.both,
-                        columnWidthMode: ColumnWidthMode.fill,
-                        headerGridLinesVisibility: GridLinesVisibility.both,
-                        horizontalScrollPhysics:
-                            const AlwaysScrollableScrollPhysics(),
-                        verticalScrollPhysics:
-                            const AlwaysScrollableScrollPhysics(),
-                        columns: selectedIndex == 0
-                            ? [
-                                // Daily Entry Columns
-                                GridColumn(
-                                  columnName: 'energy_source_name',
-                                  width: 200,
-                                  label: Container(
-                                    color: Palette.primary,
-                                    padding: const EdgeInsets.all(16.0),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      dailyEntry[0]["source"],
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                                GridColumn(
-                                  columnName: 'consumption_total',
-                                  width: 250,
-                                  label: Container(
-                                    color: Palette.primary,
-                                    padding: const EdgeInsets.all(16.0),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      dailyEntry[1]["source"],
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ]
-                            : [
-                                // Monthly Entry Columns
-                                GridColumn(
-                                  columnName: 'energy_source_name',
-                                  width: 200,
-                                  label: Container(
-                                    color: Palette.primary,
-                                    padding: const EdgeInsets.all(16.0),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      monthlyEntry[0]["source"],
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                                GridColumn(
-                                  width: 250,
-                                  columnName: 'consumption_total',
-                                  label: Container(
-                                    color: Palette.primary,
-                                    padding: const EdgeInsets.all(16.0),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      monthlyEntry[1]["source"],
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                                GridColumn(
-                                  width: 250,
-                                  columnName: 'consumption',
-                                  label: Container(
-                                    color: Palette.primary,
-                                    padding: const EdgeInsets.all(16.0),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      monthlyEntry[2]["source"],
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                      ),
-                    ),
               !isView ||
                       dataSource.rows.isEmpty ||
                       auth.user?.employeeType == 'Operator' ||

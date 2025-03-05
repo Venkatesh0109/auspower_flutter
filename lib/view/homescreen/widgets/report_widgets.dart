@@ -278,7 +278,7 @@ class DropdownDialogList extends StatefulWidget {
       {super.key,
       required this.courses,
       required this.dropdownKey,
-       this.dropdownKey1="",
+      this.dropdownKey1 = "",
       required this.hint,
       required this.onSelected,
       required this.head,
@@ -363,8 +363,12 @@ class _DropdownDialogListState extends State<DropdownDialogList> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextCustom(widget.dropdownKey1==""? "${course[index][widget.dropdownKey]}":"${course[index][widget.dropdownKey1]} - ${course[index][widget.dropdownKey]}",
-                        fontWeight: FontWeight.w400, size: 14),
+                    TextCustom(
+                        widget.dropdownKey1 == ""
+                            ? "${course[index][widget.dropdownKey]}"
+                            : "${course[index][widget.dropdownKey1]} - ${course[index][widget.dropdownKey]}",
+                        fontWeight: FontWeight.w400,
+                        size: 14),
                     dividerCommonNew(),
                     const SizedBox(height: 4)
                   ]),
@@ -387,7 +391,7 @@ class ContainerListDialogManualData extends StatelessWidget {
     required this.hint,
     required this.fun,
     this.colors,
-    this.key1 ,
+    this.key1,
     required this.keys,
   });
 
@@ -420,8 +424,13 @@ class ContainerListDialogManualData extends StatelessWidget {
                       color: Palette.dark.withOpacity(.6),
                     )
                   : Expanded(
-                      child: TextCustom(data?[key1] == null||data?[key1] == ""?"${data?[keys]}": "${data?[key1]} - ${data?[keys]}",
-                          maxLines: 1, fontWeight: FontWeight.w400, size: 14)),
+                      child: TextCustom(
+                          data?[key1] == null || data?[key1] == ""
+                              ? "${data?[keys]}"
+                              : "${data?[key1]} - ${data?[keys]}",
+                          maxLines: 1,
+                          fontWeight: FontWeight.w400,
+                          size: 14)),
             ]),
       ),
     );
@@ -531,18 +540,36 @@ class _TextFieldDropdownSearchState extends State<TextFieldDropdownSearch> {
   }
 }
 
-Future<void> pickDate(
-    BuildContext context, Function(String?) onDatePicked) async {
+Future<void> pickDate(BuildContext context, Function(String?) onDatePicked,
+    {bool allowFutureDates = true}) async {
+  DateTime now = DateTime.now();
+  DateTime firstSelectableDate = DateTime(2000);
+  DateTime lastSelectableDate = allowFutureDates
+      ? DateTime(2100)
+      : now.subtract(Duration(days: 1)); // Disable today
+
   DateTime? pickedDate = await showDatePicker(
     context: context,
-    initialDate: DateTime.now(),
-    firstDate: DateTime(2000),
-    lastDate: DateTime(2100),
+    initialDate: lastSelectableDate, // Default to the last selectable date
+    firstDate: firstSelectableDate,
+    lastDate: lastSelectableDate,
+    selectableDayPredicate: (DateTime date) {
+      if (!allowFutureDates &&
+          date.day == now.day &&
+          date.month == now.month &&
+          date.year == now.year) {
+        return false; // Disable today's date
+      }
+      return true; // Allow past dates
+    },
   );
 
-  String formattedDate =
-      DateFormat('dd-MM-yyyy').format(pickedDate!); // Format the date
-  onDatePicked(formattedDate); // Pass the formatted date back
+  if (pickedDate != null) {
+    String formattedDate = !allowFutureDates
+        ? DateFormat('yyyy-MM-dd').format(pickedDate)
+        : DateFormat('dd-MM-yyyy').format(pickedDate);
+    onDatePicked(formattedDate);
+  }
 }
 
 Future<void> pickMonthYear(
@@ -556,7 +583,8 @@ Future<void> pickMonthYear(
   );
 
   if (picked != null) {
-    final formattedDate = DateFormat("MM-yyyy").format(picked); // Format to MM-yyyy
+    final formattedDate =
+        DateFormat("MM-yyyy").format(picked); // Format to MM-yyyy
     onDatePicked(formattedDate);
   }
 }

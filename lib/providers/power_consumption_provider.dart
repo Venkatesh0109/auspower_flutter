@@ -22,67 +22,61 @@ class PowerConsumptionProvider extends ChangeNotifier {
   }
 
   void getCampusList(List data) {
-    campusData = data;
-    // campusData =
-    // [
-    //   {"campus_name": "All"},
-    //   ...data
-    // ]; // Add at first index
+    // campusData = data;
+    campusData = [
+      {"campus_name": "All"},
+      ...data
+    ]; // Add at first index
     notifyListeners();
   }
 
   void getCompanyList(List data) {
-    companyData = data;
-    // companyData =
-    // [
-    //   {"company_name": "All"},
-    //   ...data
-    // ];
+    // companyData = data;
+    companyData = [
+      {"company_name": "All"},
+      ...data
+    ];
     notifyListeners();
   }
 
   void getBusinessList(List data) {
-    buLists = data;
-    // buLists =
-    // [
-    //   {"bu_name": "All"},
-    //   ...data
-    // ];
+    // buLists = data;
+    buLists = [
+      {"bu_name": "All"},
+      ...data
+    ];
     notifyListeners();
   }
 
   void getPlantList(List data) {
-    plantLists = data;
-    // plantLists =
-    // [
-    //   {"plant_name": "All"},
-    //   ...data
-    // ];
+    // plantLists = data;
+    plantLists = [
+      {"plant_name": "All"},
+      ...data
+    ];
     notifyListeners();
   }
 
   void getDepartmentList(List data) {
-    departmentLists = data;
-    // departmentLists =
-    // [
-    //   {"plant_department_name": "All"},
-    //   ...data
-    // ];
+    // departmentLists = data;
+    departmentLists = [
+      {"plant_department_name": "All"},
+      ...data
+    ];
     notifyListeners();
   }
 
   void getEquipmentList(List data) {
-    equipmentLists = data;
-    // equipmentLists =
-    // [
-    //   {"equipment_group_name": "All"},
-    //   ...data
-    // ];
+    // equipmentLists = data;
+    equipmentLists = [
+      {"equipment_group_name": "All"},
+      ...data
+    ];
     notifyListeners();
   }
+
   void getIpAddres(List data) {
-    ipAddress =
-    [
+    ipAddress = [
       {"ip_address": "All"},
       ...data
     ];
@@ -125,7 +119,7 @@ class PowerConsumptionProvider extends ChangeNotifier {
   List<Map<String, dynamic>> tableValues = [];
 
   void getEnergyEntryList(List<Map<String, dynamic>> data, bool isDaily) {
-    logger.w(data);
+    // logger.w(data);
     energyEnterList = data;
     notifyListeners();
   }

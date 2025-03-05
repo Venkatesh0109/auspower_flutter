@@ -1,0 +1,1 @@
+/Users/iot/Downloads/Flutter Projects/Ausweg Projects/auspower_flutter/build/app/intermediates/cxx/Debug/2s604y4i/obj/arm64-v8a

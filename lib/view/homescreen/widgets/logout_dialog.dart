@@ -93,5 +93,6 @@ class _LogoutDialogState extends State<LogoutDialog> {
     companyProvider.clear();
     powerProvider.clear();
     tableProvider.clear();
+    analysisProvider.clear();
   }
 }

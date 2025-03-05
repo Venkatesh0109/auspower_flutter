@@ -1,0 +1,2 @@
+/Users/iot/Downloads/Flutter Projects/Ausweg Projects/auspower_flutter/android/app/.cxx/RelWithDebInfo/6s6f641i/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/iot/Downloads/Flutter Projects/Ausweg Projects/auspower_flutter/android/app/.cxx/RelWithDebInfo/6s6f641i/armeabi-v7a/CMakeFiles/rebuild_cache.dir
