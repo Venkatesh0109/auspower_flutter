@@ -5,14 +5,16 @@ import 'package:auspower_flutter/models/power_factor_variation_model.dart';
 import 'package:auspower_flutter/models/response.dart';
 import 'package:auspower_flutter/providers/providers.dart';
 import 'package:auspower_flutter/services/api/api_services.dart';
-import 'package:auspower_flutter/utilities/extensions/response_extension.dart';
 import 'package:flutter/material.dart';
 
 class AnalysisRepository {
   Future<bool> getMeterResetReport(BuildContext context) async {
     Map<String, dynamic> params = {};
     if (authProvider.user?.employeeType == 'Operator' ||
-        authProvider.user?.employeeType == 'Plant') {
+        authProvider.user?.employeeType == 'Plant'
+        &&
+              authProvider.user?.isCampus == "no"
+        ) {
       params.addAll({"plant_id": authProvider.user?.plantId});
     } else {
       authProvider.user?.campusId == 0
@@ -36,7 +38,10 @@ class AnalysisRepository {
     params.addAll({"method": "summary", "range": "", "date": date});
     logger.i(params);
     if (authProvider.user?.employeeType == 'Operator' ||
-        authProvider.user?.employeeType == 'Plant') {
+        authProvider.user?.employeeType == 'Plant'
+        &&
+              authProvider.user?.isCampus == "no"
+        ) {
       params.addAll({"plant_id": authProvider.user?.plantId});
     } else {
       authProvider.user?.campusId == 0
@@ -64,21 +69,22 @@ class AnalysisRepository {
     params.addAll({"method": "detail", "range": range, "date": date});
 
     if (authProvider.user?.employeeType == 'Operator' ||
-        authProvider.user?.employeeType == 'Plant') {
+        authProvider.user?.employeeType == 'Plant'
+        &&
+              authProvider.user?.isCampus == "no"
+        ) {
       params.addAll({"plant_id": authProvider.user?.plantId});
     } else {
       authProvider.user?.campusId == 0
           ? {}
           : params.addAll({"campus_id": authProvider.user?.campusId});
     }
-    logger.f(params);
     analysisProvider.isLoading = true;
     ResponseData response =
         await APIService().post(context, "pf_range_counts/", body: params);
     analysisProvider.isLoading = false;
 
     // if (response.hasError) return false;
-    logger.f(response.data);
     final jsonObj = response.data;
     analysisProvider.powerFactorDetailData =
         PowerFactorVariationDetailModel.fromJson(jsonObj);

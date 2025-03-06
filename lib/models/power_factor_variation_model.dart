@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:auspower_flutter/constants/keys.dart';
 
 class PowerFactorVariationModel {
   final List<Powerfactor>? powerfactor;

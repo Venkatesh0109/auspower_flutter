@@ -9,7 +9,6 @@ import 'package:auspower_flutter/constants/space.dart';
 import 'package:auspower_flutter/models/auth_user.dart';
 import 'package:auspower_flutter/providers/auth_provider.dart';
 import 'package:auspower_flutter/providers/providers.dart';
-import 'package:auspower_flutter/repositories/analysis_repository.dart';
 import 'package:auspower_flutter/services/route/navigation.dart';
 import 'package:auspower_flutter/services/storage/storage_constants.dart';
 import 'package:auspower_flutter/theme/palette.dart';
@@ -64,6 +63,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
       String authDetails =
           await storage.read(key: StorageConstants.authCreds) ?? '';
       authProvider.user = AuthUser.fromJson(jsonDecode(authDetails));
+
+      // DateTime now = DateTime.now();
+      // DateTime previousDate = now.subtract(const Duration(days: 1));
+      // final fromDate = DateFormat("yyyy-MM-dd").format(previousDate);
+      // AnalysisRepository().getPowerFactorReport(context, fromDate.toString());
 
       // logger.w(authProvider.user?.toJson());
       // if (authProvider.user?.employeeType != 'Admin' ||

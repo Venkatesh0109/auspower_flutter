@@ -1,6 +1,5 @@
 import 'package:auspower_flutter/common/widgets/empty.dart';
 import 'package:auspower_flutter/common/widgets/loaders.dart';
-import 'package:auspower_flutter/constants/keys.dart';
 import 'package:auspower_flutter/models/meter_reset_model.dart';
 import 'package:auspower_flutter/providers/analysis_provider.dart';
 import 'package:auspower_flutter/repositories/analysis_repository.dart';
@@ -44,7 +43,7 @@ class _MeterResetReportScreenState extends State<MeterResetReportScreen> {
           ),
         ),
         body: value.isLoading
-            ? Center(child: Loader())
+            ? const Center(child: Loader())
             : meterList.isEmpty
                 ? const EmptyScreen()
                 : RefreshIndicator(
@@ -168,11 +167,11 @@ class MeterResetDataSource extends DataGridSource {
           );
         } else {
           return Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             alignment: Alignment.center,
             child: Text(
               e.value.toString(),
-              style: TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14),
             ),
           );
         }

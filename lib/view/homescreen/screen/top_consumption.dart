@@ -112,6 +112,7 @@ class _MeterDataChartState extends State<MeterDataChart>
                       dataLabelSettings: const DataLabelSettings(
                         isVisible: true,
                         // alignment: ChartAlignment.values,
+                        labelAlignment: ChartDataLabelAlignment.bottom,
                         textStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,

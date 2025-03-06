@@ -10,7 +10,6 @@ import 'package:auspower_flutter/theme/palette.dart';
 import 'package:auspower_flutter/view/dashboardscreen.dart';
 import 'package:auspower_flutter/view/homescreen/screen/power_consumption.dart';
 import 'package:auspower_flutter/view/homescreen/widgets/report_widgets.dart';
-import 'package:auspower_flutter/view/notification/notification_screen.dart';
 import 'package:auspower_flutter/view/report/screens/power_factor_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -25,22 +24,15 @@ class PowerFactorVariationReport extends StatefulWidget {
       _PowerFactorVariationReportState();
 }
 
+String? fromDate;
+
 class _PowerFactorVariationReportState
     extends State<PowerFactorVariationReport> {
-  final List<Map<String, dynamic>> jsonData = [
-    {
-      "above_1": 204,
-      "between_9": 4,
-      "above_6": 2,
-      "below_6": 126,
-    }
-  ];
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((t) {
       DateTime now = DateTime.now();
-      DateTime previousDate = now.subtract(Duration(days: 1));
+      DateTime previousDate = now.subtract(const Duration(days: 1));
       fromDate = DateFormat("yyyy-MM-dd").format(previousDate);
       AnalysisRepository().getPowerFactorReport(context, fromDate.toString());
       setState(() {});
@@ -50,8 +42,6 @@ class _PowerFactorVariationReportState
 
   PowerFactorDataSource powerFactorDataSource =
       PowerFactorDataSource(powerFactorList: []);
-
-  String? fromDate;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +70,7 @@ class _PowerFactorVariationReportState
           // ],
         ),
         body: value.isLoading
-            ? Center(child: Loader())
+            ? const Center(child: Loader())
             :
             // RefreshIndicator(
             // onRefresh: () async {
@@ -91,8 +81,8 @@ class _PowerFactorVariationReportState
             //       .getPowerFactorReport(context, fromDate.toString());
             // },
             // child:
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            ListView(
+                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(12),
@@ -100,13 +90,13 @@ class _PowerFactorVariationReportState
                       date: fromDate,
                       hint: "Select Date",
                       onPickDate: () async {
-                        await pickDate(context, (String? pickedDate) {
+                        await pickDateSubractDay(context, (String? pickedDate) {
                           setState(() {
                             fromDate = pickedDate;
                             AnalysisRepository().getPowerFactorReport(
                                 context, fromDate.toString());
                           });
-                        }, allowFutureDates: false);
+                        });
                       },
                       onRemoveDate: () {
                         setState(() {
@@ -115,8 +105,8 @@ class _PowerFactorVariationReportState
                       },
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 12),
                     child: TextCustom(
                       "Summary :",
                       color: Palette.primary,
@@ -124,7 +114,7 @@ class _PowerFactorVariationReportState
                       size: 18,
                     ),
                   ),
-                  HeightHalf(),
+                  const HeightHalf(),
                   SfDataGrid(
                     source: powerFactorDataSource,
                     onCellTap: (DataGridCellTapDetails details) {
@@ -161,8 +151,7 @@ class _PowerFactorVariationReportState
                     headerGridLinesVisibility: GridLinesVisibility.both,
                     horizontalScrollPhysics:
                         const AlwaysScrollableScrollPhysics(),
-                    verticalScrollPhysics:
-                        const AlwaysScrollableScrollPhysics(),
+                    verticalScrollPhysics: const NeverScrollableScrollPhysics(),
                     columns: [
                       GridColumn(
                         columnName: 'pf_range',
@@ -198,6 +187,40 @@ class _PowerFactorVariationReportState
       );
     });
   }
+
+  Future<void> pickDateSubractDay(
+    BuildContext context,
+    Function(String?) onDatePicked,
+  ) async {
+    DateTime now = DateTime.now();
+    DateTime firstSelectableDate = DateTime(2000);
+    DateTime lastSelectableDate = now.subtract(const Duration(days: 1));
+    DateTime initialDate = fromDate != null
+        ? DateFormat('yyyy-MM-dd').parse(fromDate!)
+        : lastSelectableDate;
+
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate, // ✅ Always show last selected date
+      firstDate: firstSelectableDate,
+      lastDate: lastSelectableDate,
+      selectableDayPredicate: (DateTime date) {
+        if (date.day == now.day &&
+            date.month == now.month &&
+            date.year == now.year) {
+          return false; // Disable today's date
+        }
+        return true; // Allow past dates
+      },
+    );
+
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+
+      fromDate = formattedDate; // ✅ Store last selected date
+      onDatePicked(formattedDate);
+    }
+  }
 }
 
 class PowerFactorDataSource extends DataGridSource {
@@ -214,20 +237,22 @@ class PowerFactorDataSource extends DataGridSource {
 
       // Mapping JSON keys to readable "PF Range" labels
       rows.add(DataGridRow(cells: [
-        DataGridCell<String>(columnName: 'pf_range', value: '>1'),
+        const DataGridCell<String>(columnName: 'pf_range', value: '>1'),
         DataGridCell<int>(columnName: 'no_of_meters', value: firstEntry.above1),
       ]));
       rows.add(DataGridRow(cells: [
-        DataGridCell<String>(columnName: 'pf_range', value: '>0.9 and <=1'),
+        const DataGridCell<String>(
+            columnName: 'pf_range', value: '>0.9 and <=1'),
         DataGridCell<int>(
             columnName: 'no_of_meters', value: firstEntry.between9),
       ]));
       rows.add(DataGridRow(cells: [
-        DataGridCell<String>(columnName: 'pf_range', value: '>0.6 and <=0.9'),
+        const DataGridCell<String>(
+            columnName: 'pf_range', value: '>0.6 and <=0.9'),
         DataGridCell<int>(columnName: 'no_of_meters', value: firstEntry.above6),
       ]));
       rows.add(DataGridRow(cells: [
-        DataGridCell<String>(columnName: 'pf_range', value: '<0.6'),
+        const DataGridCell<String>(columnName: 'pf_range', value: '<0.6'),
         DataGridCell<int>(columnName: 'no_of_meters', value: firstEntry.below6),
       ]));
     }
@@ -242,11 +267,11 @@ class PowerFactorDataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map((dataGridCell) {
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         alignment: Alignment.center,
         child: Text(
           dataGridCell.value.toString(),
-          style: TextStyle(fontSize: 14),
+          style: const TextStyle(fontSize: 14),
         ),
       );
     }).toList());

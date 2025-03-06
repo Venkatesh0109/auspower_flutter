@@ -333,12 +333,13 @@ class _DetailpowerConnsumptionTableState
         File('${directory.path}/DetailedPowerConsumption_$timestamp.xlsx');
 
     await file.writeAsBytes(bytes);
+    await NotificationServiceData().showDownloadNotification(file, false);
+
 
     if (Platform.isIOS) {
       await Share.shareXFiles([XFile(file.path)], text: "Download Excel");
     }
 
-    await NotificationServiceData().showDownloadNotification(file, false);
   }
 }
 

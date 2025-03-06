@@ -19,7 +19,6 @@ import 'package:auspower_flutter/view/homescreen/screen/top_consumption.dart';
 import 'package:auspower_flutter/view/notification/notification_screen.dart';
 import 'package:auspower_flutter/view/activity/screens/energy_entry.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';

@@ -13,7 +13,7 @@ extension ContextExtension on BuildContext {
       isRotated ? heightFull() < 650 : widthFull() < 650;
 
   ///[isTablet] Returns true if the screen width is greater than or equal to 650
-  bool isTablet() => MediaQuery.of(this).size.width >= 650;
+  bool isTablet() => MediaQuery.of(this).size.width >= 600;
 
   ///[isDesktop] Returns true if the screen width is greater than or equal to 1100
   bool isDesktop() => MediaQuery.of(this).size.width >= 1100;

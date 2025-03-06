@@ -546,7 +546,7 @@ Future<void> pickDate(BuildContext context, Function(String?) onDatePicked,
   DateTime firstSelectableDate = DateTime(2000);
   DateTime lastSelectableDate = allowFutureDates
       ? DateTime(2100)
-      : now.subtract(Duration(days: 1)); // Disable today
+      : now.subtract(const Duration(days: 1)); // Disable today
 
   DateTime? pickedDate = await showDatePicker(
     context: context,

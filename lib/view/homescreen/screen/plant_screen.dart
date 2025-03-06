@@ -36,7 +36,8 @@ class _PlantScreenState extends State<PlantScreen> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((t) {
       if (authProvider.user?.employeeType == 'Operator' ||
-          authProvider.user?.employeeType == 'Plant') {
+          authProvider.user?.employeeType == 'Plant'&&
+              authProvider.user?.isCampus == "no") {
         PowerConsumptionRepository().getPowerReportData(context);
         PowerConsumptionRepository().getCampusData(context);
         CompanyRepository().getPlantList(context,
@@ -70,7 +71,8 @@ class _PlantScreenState extends State<PlantScreen> {
     return WillPopScope(
       onWillPop: () async {
         if (authProvider.user?.employeeType == 'Operator' ||
-            authProvider.user?.employeeType == 'Plant') {
+            authProvider.user?.employeeType == 'Plant'&&
+              authProvider.user?.isCampus == "no") {
           final now = DateTime.now();
           bool allowPop = false;
 
@@ -93,17 +95,20 @@ class _PlantScreenState extends State<PlantScreen> {
       },
       child: Scaffold(
         key: authProvider.user?.employeeType == 'Operator' ||
-                authProvider.user?.employeeType == 'Plant'
+                authProvider.user?.employeeType == 'Plant'&&
+              authProvider.user?.isCampus == "no"
             ? homeKey
             : null,
         drawer: authProvider.user?.employeeType == 'Operator' ||
-                authProvider.user?.employeeType == 'Plant'
+                authProvider.user?.employeeType == 'Plant'&&
+              authProvider.user?.isCampus == "no"
             ? const CustomDrawer()
             : null,
         appBar: CommonAppBar(
           title: "Plant List",
           action: authProvider.user?.employeeType == 'Operator' ||
-                  authProvider.user?.employeeType == 'Plant'
+                  authProvider.user?.employeeType == 'Plant'&&
+              authProvider.user?.isCampus == "no"
               ? Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: Row(
@@ -120,7 +125,8 @@ class _PlantScreenState extends State<PlantScreen> {
                 )
               : const SizedBox.shrink(),
           leading: authProvider.user?.employeeType == 'Operator' ||
-                  authProvider.user?.employeeType == 'Plant'
+                  authProvider.user?.employeeType == 'Plant'&&
+              authProvider.user?.isCampus == "no"
               ? InkWell(
                   onTap: () {
                     homeKey.currentState!.openDrawer();

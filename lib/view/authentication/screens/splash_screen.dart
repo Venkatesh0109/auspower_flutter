@@ -39,7 +39,8 @@ class _SplashScreenState extends State<SplashScreen> {
       AuthUser user = AuthUser.fromJson(jsonDecode(authDetails));
       authProvider.user = user;
       if (authProvider.user?.employeeType == 'Operator' ||
-          authProvider.user?.employeeType == 'Plant') {
+          authProvider.user?.employeeType == 'Plant' &&
+              authProvider.user?.isCampus == "no") {
         Navigation().pushRemoveUntil(
             context,
             PlantScreen(

@@ -70,7 +70,10 @@ class AuthRepository {
     authProvider.token = responseData.data['access_token'] ?? '';
     logger.w(responseData.data['data'][0]);
     if (authProvider.user?.employeeType == 'Operator' ||
-        authProvider.user?.employeeType == 'Plant') {
+        authProvider.user?.employeeType == 'Plant'
+        &&
+              authProvider.user?.isCampus == "no"
+        ) {
       Navigation().pushRemoveUntil(
           context,
           PlantScreen(
