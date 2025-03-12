@@ -4,6 +4,7 @@ import 'package:auspower_flutter/constants/keys.dart';
 import 'package:auspower_flutter/constants/space.dart';
 import 'package:auspower_flutter/providers/auth_provider.dart';
 import 'package:auspower_flutter/providers/providers.dart';
+import 'package:auspower_flutter/repositories/sql_db_repository.dart';
 import 'package:auspower_flutter/services/route/navigation.dart';
 import 'package:auspower_flutter/services/storage/storage_constants.dart';
 import 'package:auspower_flutter/theme/palette.dart';
@@ -62,6 +63,7 @@ class _LogoutDialogState extends State<LogoutDialog> {
                       }
                       await FirebaseMessaging.instance.deleteToken();
                       storage.delete(key: StorageConstants.authCreds);
+                      SqlDbRepository().deleteAll();
                       clearProviderData();
                       // clearAppCache();
                       setState(() {

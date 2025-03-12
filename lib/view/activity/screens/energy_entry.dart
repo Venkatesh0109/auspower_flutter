@@ -62,7 +62,7 @@ class _EnergyEntryScreenState extends State<EnergyEntryScreen> {
       campus = powerProvider.campusData.firstWhere(
         (e) =>
             "${e['campus_id']}" ==
-            "${authProvider.user?.employeeType == "Operator" ? authProvider.user?.campusId : widget.campusId}",
+            "${authProvider.user?.employeeType == "Operator" || authProvider.user?.employeeType == 'Plant' && authProvider.user?.isCampus == "no" ? authProvider.user?.campusId : widget.campusId}",
         orElse: () => {},
       );
       // logger.w(selectedMonthYear);

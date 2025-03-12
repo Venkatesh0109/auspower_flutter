@@ -540,34 +540,23 @@ class _TextFieldDropdownSearchState extends State<TextFieldDropdownSearch> {
   }
 }
 
-Future<void> pickDate(BuildContext context, Function(String?) onDatePicked,
-    {bool allowFutureDates = true}) async {
+Future<void> pickDate(
+  BuildContext context,
+  Function(String?) onDatePicked,
+) async {
   DateTime now = DateTime.now();
   DateTime firstSelectableDate = DateTime(2000);
-  DateTime lastSelectableDate = allowFutureDates
-      ? DateTime(2100)
-      : now.subtract(const Duration(days: 1)); // Disable today
+  DateTime lastSelectableDate = now;
 
   DateTime? pickedDate = await showDatePicker(
     context: context,
-    initialDate: lastSelectableDate, // Default to the last selectable date
+    initialDate: now,
     firstDate: firstSelectableDate,
     lastDate: lastSelectableDate,
-    selectableDayPredicate: (DateTime date) {
-      if (!allowFutureDates &&
-          date.day == now.day &&
-          date.month == now.month &&
-          date.year == now.year) {
-        return false; // Disable today's date
-      }
-      return true; // Allow past dates
-    },
   );
 
   if (pickedDate != null) {
-    String formattedDate = !allowFutureDates
-        ? DateFormat('yyyy-MM-dd').format(pickedDate)
-        : DateFormat('dd-MM-yyyy').format(pickedDate);
+    String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
     onDatePicked(formattedDate);
   }
 }

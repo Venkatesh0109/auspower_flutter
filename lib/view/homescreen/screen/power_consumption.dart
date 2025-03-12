@@ -112,13 +112,15 @@ class _PowerConsumptionState extends State<PowerConsumption> {
     fromDate = DateFormat("dd-MM-yyyy").format(now);
     toDate = DateFormat("dd-MM-yyyy").format(now);
     // powerProvider.getCampusList([]);
-    powerProvider.getCompanyList([]);
-    powerProvider.getBusinessList([]);
-    powerProvider.getPlantList([]);
-    powerProvider.getDepartmentList([]);
-    powerProvider.getEquipmentList([]);
+    // powerProvider.getCompanyList([]);
+    // powerProvider.getBusinessList([]);
+    // powerProvider.getPlantList([]);
+    // powerProvider.getDepartmentList([]);
+    // powerProvider.getEquipmentList([]);
+    logger.e(authProvider.user?.toJson());
     if (authProvider.user?.employeeType == "Operator" ||
-        authProvider.user?.employeeType == "Plant") {
+        authProvider.user?.employeeType == 'Plant' &&
+            authProvider.user?.isCampus == "no") {
       campus = powerProvider.campusData.firstWhere(
           (e) => "${e["campus_id"]}" == authProvider.user?.campusId.toString(),
           orElse: () => {});
@@ -129,6 +131,7 @@ class _PowerConsumptionState extends State<PowerConsumption> {
       bu = powerProvider.buLists.firstWhere(
           (e) => "${e["bu_id"]}" == authProvider.user?.buId.toString(),
           orElse: () => {});
+
       plant = powerProvider.plantLists.firstWhere(
           (e) => "${e["plant_id"]}" == authProvider.user?.plantId.toString(),
           orElse: () => {});

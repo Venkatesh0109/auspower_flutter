@@ -41,12 +41,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   final dateTime = DateTime.now();
   final formattedDateTime = DateFormat("dd-MM-yyyy HH:mm:ss").format(dateTime);
-  logger.f(message.notification!.title);
-  logger.f(message.notification!.body);
+  logger.f(message.notification?.title);
+  logger.f(message.notification?.body);
   SqlDbRepository().createItem(
     NotificationModel(
-      message.notification!.title ?? "",
-      message.notification!.body ?? "",
+      message.notification?.title ?? "",
+      message.notification?.body ?? "",
       formattedDateTime,
     ),
   );
@@ -106,12 +106,12 @@ void main() async {
     final dateTime = DateTime.now();
     final formattedDateTime =
         DateFormat("dd-MM-yyyy HH:mm:ss").format(dateTime);
-    logger.f(message.notification!.title);
-    logger.f(message.notification!.body);
+    logger.f(message.notification?.title);
+    logger.f(message.notification?.body);
     SqlDbRepository().createItem(
       NotificationModel(
-        message.notification!.title ?? "",
-        message.notification!.body ?? "",
+        message.notification?.title ?? "",
+        message.notification?.body ?? "",
         formattedDateTime,
       ),
     );
