@@ -52,7 +52,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Consumer2<AuthProvider, TableProvider>(
@@ -73,8 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           Navigation().push(context,
                               FadeRoute(page: const NotificationScreen()));
                         },
-                        child:
-                            const Icon(Icons.notifications_active_outlined)),
+                        child: const Icon(Icons.notifications_active_outlined)),
                   ],
                 ),
               ),
@@ -103,8 +101,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Expanded(
                       child: AnimatedCard(
                         onTap: () {
-                          Navigation().push(context,
-                              FadeRoute(page: const MeterDataChart()));
+                          Navigation().push(
+                              context, FadeRoute(page: const MeterDataChart()));
                         },
                         color: const Color(0xffEEDEF6),
                         head: "Top Consumption",
@@ -123,8 +121,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const HeightHalf(),
                 AnimatedCard(
                   onTap: () {
-                    Navigation().push(context,
-                        FadeRoute(page: const EnergyAnalysisScreen()));
+                    Navigation().push(
+                        context, FadeRoute(page: const EnergyAnalysisScreen()));
                   },
                   color: const Color.fromARGB(255, 186, 236, 254),
                   head: "Energy Analysis",
@@ -207,10 +205,10 @@ class EmployeeDataSource extends DataGridSource {
         DataGridCell<String>(columnName: 'Slave Id', value: "${e.slaveId}"),
         DataGridCell<double>(columnName: 'C.KWH', value: e.machineKWh),
         DataGridCell<double>(columnName: 'Energy', value: e.kWh),
-        DataGridCell<double>(columnName: 'kva', value: e.kva),
-        DataGridCell<double>(
+        DataGridCell<String>(columnName: 'kva', value: e.kva),
+        DataGridCell<String>(
             columnName: 'Average Powerfactor', value: e.avgPowerfactor),
-        DataGridCell<double>(columnName: 'Power(kw)', value: e.kw),
+        DataGridCell<String>(columnName: 'Power(kw)', value: e.kw),
         DataGridCell<String>(columnName: 'Meter Type', value: e.meterType),
         DataGridCell<String>(columnName: 'IP Address', value: e.ipAddress),
       ]);

@@ -14,8 +14,6 @@ import 'package:auspower_flutter/common/widgets/text.dart';
 import 'package:auspower_flutter/constants/space.dart';
 import 'package:auspower_flutter/theme/palette.dart';
 import 'package:auspower_flutter/view/homescreen/widgets/sheetview_widget.dart';
-import 'package:marquee/marquee.dart';
-
 import 'package:provider/provider.dart';
 
 class SheetViewScreen extends StatefulWidget {
@@ -27,12 +25,12 @@ class SheetViewScreen extends StatefulWidget {
 }
 
 class _SheetViewScreenState extends State<SheetViewScreen> {
-  int _selectedIndex = 0; // To keep track of the selected tab index
+  int _selectedIndex = 0; 
 
   final List<String> tabTitles = [
     'Sheet View',
     'Grid View'
-  ]; // Dynamic list of tab titles
+  ]; 
 
   Map selectedIpAddress = {};
 
@@ -97,15 +95,15 @@ class _SheetViewScreenState extends State<SheetViewScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Row(
           mainAxisAlignment:
-              MainAxisAlignment.center, // Center the row horizontally
+              MainAxisAlignment.center, 
           children: List.generate(tabTitles.length, (index) {
             return Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: 10.0), // Add space between tabs
+                  horizontal: 10.0), 
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    _selectedIndex = index; // Update the selected tab
+                    _selectedIndex = index; 
                   });
                 },
                 child: Container(
@@ -232,7 +230,6 @@ class _GridViewWidgetState extends State<GridViewWidget> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    bool isTablet = context.widthFull() >= 600;
     bool isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
     return Consumer<TableProvider>(
@@ -274,45 +271,47 @@ class _GridViewWidgetState extends State<GridViewWidget> {
                                       MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    LayoutBuilder(
-                                      builder: (context, constraints) {
-                                        if (gridViewData.meterName
-                                                .toString()
-                                                .length >
-                                            (constraints.maxWidth / 8)) {
-                                          return Marquee(
-                                            text: gridViewData.meterName
-                                                .toString(),
-                                            style: const TextStyle(
-                                                fontSize: 13,
-                                                color: Palette.primary,
-                                                fontWeight: FontWeight.bold),
-                                            scrollAxis: Axis.horizontal,
-                                            blankSpace: 20.0,
-                                            velocity: 30.0,
-                                            pauseAfterRound:
-                                                const Duration(seconds: 1),
-                                            startPadding: 10.0,
-                                            accelerationDuration:
-                                                const Duration(seconds: 1),
-                                            accelerationCurve: Curves.linear,
-                                            decelerationDuration:
-                                                const Duration(
-                                                    milliseconds: 500),
-                                            decelerationCurve: Curves.easeOut,
-                                          );
-                                        } else {
-                                          return TextCustom(
-                                            "${gridViewData.meterName}",
-                                            fontWeight: FontWeight.bold,
-                                            color:
-                                                Palette.primary.withOpacity(.7),
-                                            size: 13,
-                                            maxLines: 1,
-                                          );
-                                        }
-                                      },
+                                    Expanded(
+                                      child: TextCustom(
+                                        "${gridViewData.meterName}",
+                                        fontWeight: FontWeight.bold,
+                                        color: Palette.primary.withOpacity(.7),
+                                        size: 13,
+                                        maxLines: 2,
+                                      ),
                                     ),
+                                    // LayoutBuilder(
+                                    //   builder: (context, constraints) {
+                                    //     if (gridViewData.meterName
+                                    //             .toString()
+                                    //             .length >
+                                    //         (constraints.maxWidth / 6)) {
+                                    //       return Marquee(
+                                    //         text: gridViewData.meterName
+                                    //             .toString(),
+                                    //         style: const TextStyle(
+                                    //             fontSize: 13,
+                                    //             color: Palette.primary,
+                                    //             fontWeight: FontWeight.bold),
+                                    //         scrollAxis: Axis.horizontal,
+                                    //         blankSpace: 20.0,
+                                    //         velocity: 30.0,
+                                    //         pauseAfterRound:
+                                    //             const Duration(seconds: 1),
+                                    //         startPadding: 10.0,
+                                    //         accelerationDuration:
+                                    //             const Duration(seconds: 1),
+                                    //         accelerationCurve: Curves.linear,
+                                    //         decelerationDuration:
+                                    //             const Duration(
+                                    //                 milliseconds: 500),
+                                    //         decelerationCurve: Curves.easeOut,
+                                    //       );
+                                    //     } else {
+                                    //       return
+                                    //     }
+                                    //   },
+                                    // ),
                                     // Expanded(
                                     //   child: TextCustom(
                                     //     "${gridViewData.meterName}adadaadadadaadaadadad",

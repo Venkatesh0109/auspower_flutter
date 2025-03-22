@@ -46,6 +46,11 @@
             android:value="2" />
 
         <meta-data
+            android:name="com.google.android.play.core"
+            android:value="true" />
+    
+
+        <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="high_importance_channel" />
 
@@ -79,7 +84,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <!-- Full file access permission for Android 11+ (use only if needed) -->
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    
 
 </manifest>

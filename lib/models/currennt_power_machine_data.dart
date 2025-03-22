@@ -44,41 +44,41 @@ class CurrentPowerTableData {
   String? meterType;
   // String? meterFormula;
   // String? equipmentIds;
-  // double? vlnAvg;
-  // double? rVolt;
-  // double? yVolt;
-  // double? bVolt;
-  // double? vllAvg;
-  // double? ryVolt;
-  // double? ybVolt;
-  // double? brVolt;
-  // double? rCurrent;
-  // double? yCurrent;
-  // double? bCurrent;
-  // double? tCurrent;
-  // double? tWatts;
-  // double? rWatts;
-  // double? yWatts;
-  // double? bWatts;
+  // dynamic vlnAvg;
+  // dynamic rVolt;
+  // dynamic yVolt;
+  // dynamic bVolt;
+  // dynamic vllAvg;
+  // dynamic ryVolt;
+  // dynamic ybVolt;
+  // dynamic brVolt;
+  // dynamic rCurrent;
+  // dynamic yCurrent;
+  // dynamic bCurrent;
+  // dynamic tCurrent;
+  // dynamic tWatts;
+  // dynamic rWatts;
+  // dynamic yWatts;
+  // dynamic bWatts;
   // int? tVar;
   // int? rVar;
   // int? yVar;
   // int? bVar;
-  double? tVoltampere;
+  dynamic tVoltampere;
   // int? rVoltampere;
   // int? yVoltampere;
   // int? bVoltampere;
-  double? avgPowerfactor;
+  dynamic avgPowerfactor;
   // int? pmAvgPowerfactor;
-  // double? rPowerfactor;
-  // double? yPowerfactor;
-  // double? bPowerfactor;
+  // dynamic rPowerfactor;
+  // dynamic yPowerfactor;
+  // dynamic bPowerfactor;
   // int? powerfactor;
   // int? kvah;
-  double? kw;
+  dynamic kw;
   // int? kvar;
   // int? powerFactor;
-  double? kva;
+  dynamic kva;
   // int? frequency;
   // int? machineStatus;
   // int? status;
@@ -86,9 +86,9 @@ class CurrentPowerTableData {
   // int? createdBy;
   // DateTime? modifiedOn;
   // int? modifiedBy;
-  double? machineKWh;
-  // double? masterKwh;
-  double? kWh;
+  dynamic machineKWh;
+  // dynamic masterKwh;
+  dynamic kWh;
   // int? pmKwh;
   // int? totalKWh;
   // int? kwhMin;
@@ -108,10 +108,10 @@ class CurrentPowerTableData {
   // int? kwh1;
   // int? kwh2;
   // int? kwh3;
-  // double? startKwh1;
+  // dynamic startKwh1;
   // int? startKwh2;
   // int? startKwh3;
-  // double? endKwh1;
+  // dynamic endKwh1;
   // int? endKwh2;
   // int? endKwh3;
   String? nocom;
@@ -381,7 +381,7 @@ class CurrentPowerTableData {
         // bPowerfactor: json["b_powerfactor"]?.toDouble(),
         // powerfactor: json["powerfactor"],
         // kvah: json["kvah"],
-        kw: json["kw"]?.toDouble(),
+        kw: json["kw"],
         // kvar: json["kvar"],
         // powerFactor: json["power_factor"],
         kva: json["kva"],

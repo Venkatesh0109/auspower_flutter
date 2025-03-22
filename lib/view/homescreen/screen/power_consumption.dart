@@ -117,7 +117,7 @@ class _PowerConsumptionState extends State<PowerConsumption> {
     // powerProvider.getPlantList([]);
     // powerProvider.getDepartmentList([]);
     // powerProvider.getEquipmentList([]);
-    logger.e(authProvider.user?.toJson());
+    // logger.e(authProvider.user?.toJson());
     if (authProvider.user?.employeeType == "Operator" ||
         authProvider.user?.employeeType == 'Plant' &&
             authProvider.user?.isCampus == "no") {

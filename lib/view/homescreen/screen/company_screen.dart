@@ -92,7 +92,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
           child: Consumer<CompanyProvider>(
             builder: (context, company, child) {
               List<CompanyListData> companyList =
-                  company.companyList?.data ?? [];
+                  company.companyList?.companyListData ?? [];
               return company.isLoading || company.companyList == null
                   ? const ShimmerList()
                   : companyList.isEmpty

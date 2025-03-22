@@ -10,7 +10,6 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'dart:io';
 import 'package:open_file/open_file.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xls;
 import 'package:url_launcher/url_launcher.dart';
@@ -193,18 +192,18 @@ class _DetailpowerConnsumptionTableState
     );
 
     try {
-      if (Platform.isAndroid) {
-        PermissionStatus manageStoragePermission =
-            await Permission.manageExternalStorage.request();
-        if (!manageStoragePermission.isGranted) {
-          Navigator.pop(context); // Close the loading dialog
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   const SnackBar(
-          //       content: Text('Permission to manage external storage denied.')),
-          // );
-          return;
-        }
-      }
+      // if (Platform.isAndroid) {
+      //   PermissionStatus manageStoragePermission =
+      //       await Permission.manageExternalStorage.request();
+      //   if (!manageStoragePermission.isGranted) {
+      //     Navigator.pop(context); // Close the loading dialog
+      //     // ScaffoldMessenger.of(context).showSnackBar(
+      //     //   const SnackBar(
+      //     //       content: Text('Permission to manage external storage denied.')),
+      //     // );
+      //     return;
+      //   }
+      // }
 
       final pdf = pw.Document();
 
@@ -240,7 +239,7 @@ class _DetailpowerConnsumptionTableState
 
       Directory? directory;
       if (Platform.isAndroid) {
-        directory = Directory('/storage/emulated/0/');
+        directory = Directory('/storage/emulated/0/Download');
       } else if (Platform.isIOS) {
         directory = await getApplicationDocumentsDirectory();
       }
@@ -278,17 +277,17 @@ class _DetailpowerConnsumptionTableState
   }
 
   void _downloadExcel() async {
-    if (Platform.isAndroid) {
-      PermissionStatus manageStoragePermission =
-          await Permission.manageExternalStorage.request();
-      if (!manageStoragePermission.isGranted) {
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   const SnackBar(
-        //       content: Text('Permission to manage external storage denied.')),
-        // );
-        return;
-      }
-    }
+    // if (Platform.isAndroid) {
+    //   PermissionStatus manageStoragePermission =
+    //       await Permission.manageExternalStorage.request();
+    //   if (!manageStoragePermission.isGranted) {
+    //     // ScaffoldMessenger.of(context).showSnackBar(
+    //     //   const SnackBar(
+    //     //       content: Text('Permission to manage external storage denied.')),
+    //     // );
+    //     return;
+    //   }
+    // }
 
     final xls.Workbook workbook = xls.Workbook();
     final xls.Worksheet sheet = workbook.worksheets[0];
@@ -315,7 +314,7 @@ class _DetailpowerConnsumptionTableState
 
     Directory? directory;
     if (Platform.isAndroid) {
-      directory = Directory('/storage/emulated/0/');
+      directory = Directory('/storage/emulated/0/Download');
     } else if (Platform.isIOS) {
       directory = await getApplicationDocumentsDirectory();
     }

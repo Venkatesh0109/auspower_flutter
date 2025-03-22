@@ -165,8 +165,8 @@ class PowerConsumptionRepository {
         await APIService().post(context, "current_power/", body: params);
     powerProvider.isLoading = false;
     // logger.i(response.data);
-    logger.i(response.isError);
-    logger.i(response.statusCode);
+    // logger.i(response.isError);
+    // logger.i(response.statusCode);
 
     if (response.hasError) return false;
     final jsonObj = response.data;

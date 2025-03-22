@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:auspower_flutter/constants/app_strings.dart';
 import 'package:auspower_flutter/providers/info_provider.dart';
 import 'package:auspower_flutter/providers/providers.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:intl/intl.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:provider/provider.dart';
@@ -179,6 +180,53 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  AppUpdateInfo? _updateInfo;
+  bool _flexibleUpdateAvailable = false;
+
+  @override
+  void initState() {
+    _checkForUpdate();
+    super.initState();
+  }
+
+  /// 🔥 Check for available update
+  Future<void> _checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((updateInfo) {
+      setState(() {
+        _updateInfo = updateInfo;
+      });
+
+      if (_updateInfo?.updateAvailability ==
+          UpdateAvailability.updateAvailable) {
+        _performImmediateUpdate();
+      }
+    }).catchError((e) {
+      print('Error checking for update: $e');
+    });
+  }
+
+  /// 🔥 Perform Immediate Update
+  void _performImmediateUpdate() {
+    if (_updateInfo?.immediateUpdateAllowed ?? false) {
+      InAppUpdate.performImmediateUpdate().catchError((e) {
+        // print('Immediate update failed: $e');
+      });
+    }
+  }
+
+  /// 🔥 Perform Flexible Update
+  void _performFlexibleUpdate() {
+    if (_updateInfo?.flexibleUpdateAllowed ?? false) {
+      InAppUpdate.startFlexibleUpdate().then((_) {
+        setState(() {
+          _flexibleUpdateAvailable = true;
+        });
+      }).catchError((e) {
+        // print('Flexible update failed: $e');
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer2<ThemeManager, InfoProvider>(

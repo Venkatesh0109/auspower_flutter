@@ -26,7 +26,6 @@ class CompanyRepository {
       "report_for": 'cumulative',
       "campus_id": user.campusId.toString(),
     };
-    logger.w(body);
 
     companyProvider.isLoading = true;
     ResponseData response =
@@ -59,7 +58,6 @@ class CompanyRepository {
       "campus_id": user.campusId.toString(),
       "company_id": companyId
     };
-    logger.w(body);
 
     companyProvider.isLoading = true;
     ResponseData response =

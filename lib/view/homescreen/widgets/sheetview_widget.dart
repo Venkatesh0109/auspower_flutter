@@ -59,12 +59,6 @@ class _SheetViewWidgetState extends State<SheetViewWidget> {
       headerGridLinesVisibility: GridLinesVisibility.both,
       horizontalScrollPhysics: const AlwaysScrollableScrollPhysics(),
       verticalScrollPhysics: const AlwaysScrollableScrollPhysics(),
-      // onCellTap: (details) {
-      //   String columnName = details.column.columnName;
-
-      //   employeeDataSource.sortData(columnName);
-      //   setState(() {});
-      // },
       columns: <GridColumn>[
         GridColumn(
             columnName: 'S.no',
