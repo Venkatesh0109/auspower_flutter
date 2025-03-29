@@ -103,8 +103,8 @@ class CompanyListData {
   final String? rVoltampere;
   final String? yVoltampere;
   final String? bVoltampere;
-  final String? avgPowerfactor;
-  final String? pmAvgPowerfactor;
+  final double? avgPowerfactor;
+  final double? pmAvgPowerfactor;
   final String? rPowerfactor;
   final String? yPowerfactor;
   final String? bPowerfactor;
@@ -113,32 +113,32 @@ class CompanyListData {
   final String? kw;
   final String? kvar;
   final String? powerFactor;
-  final String? kva;
+  final dynamic kva;
   final String? frequency;
   final int? machineStatus;
   final int? status;
   final DateTime? createdOn;
   final int? createdBy;
   final DateTime? modifiedOn;
-  final int? modifiedBy;
-  final double? machineKWh;
-  final double? masterKwh;
-  final double? kWh;
-  final double? pmKwh;
-  final double? totalKWh;
-  final double? kwhMin;
-  final double? kwhMax;
-  final double? avgKWh;
+  final dynamic modifiedBy;
+  final dynamic machineKWh;
+  final dynamic masterKwh;
+  final dynamic kWh;
+  final dynamic pmKwh;
+  final dynamic totalKWh;
+  final dynamic kwhMin;
+  final dynamic kwhMax;
+  final dynamic avgKWh;
   final String? minDate;
   final String? maxDate;
   final String? minShift;
   final String? maxShift;
   final double? reverseMachineKWh;
   final double? reverseMasterKwh;
-  final double? reverseKwh;
+  final dynamic reverseKwh;
   final String? ipAddress;
   final String? slaveId;
-  final int? port;
+  final dynamic port;
   final String? mac;
   final dynamic kwh1;
   final dynamic kwh2;
@@ -151,10 +151,10 @@ class CompanyListData {
   final dynamic endKwh3;
   final String? nocom;
   final String? meterStatusDescription;
-  final int? nocomSCount;
-  final int? nocomNCount;
-  final int? pmNocomSCount;
-  final int? pmNocomNCount;
+  final dynamic nocomSCount;
+  final dynamic nocomNCount;
+  final dynamic pmNocomSCount;
+  final dynamic pmNocomNCount;
   final dynamic equipmentKwh;
   final dynamic units;
   final dynamic commonKwh;
@@ -448,8 +448,8 @@ class CompanyListData {
         rVoltampere: json["r_voltampere"],
         yVoltampere: json["y_voltampere"],
         bVoltampere: json["b_voltampere"],
-        avgPowerfactor: json["avg_powerfactor"],
-        pmAvgPowerfactor: json["pm_avg_powerfactor"],
+        avgPowerfactor: json["avg_powerfactor"]?.toDouble(),
+        pmAvgPowerfactor: json["pm_avg_powerfactor"]?.toDouble(),
         rPowerfactor: json["r_powerfactor"],
         yPowerfactor: json["y_powerfactor"],
         bPowerfactor: json["b_powerfactor"],

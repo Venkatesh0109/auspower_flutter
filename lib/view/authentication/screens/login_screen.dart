@@ -27,11 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isRememberMe = false;
 
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((callback) => init());
-    super.initState();
-  }
+  // Function to get the version of the app
 
   void init() async {
     String value = await storage.read(key: StorageConstants.loginCreds) ?? '';
@@ -88,8 +84,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ]),
         ));
   }
-
-  
 
   void toggleCheckBox() {
     isRememberMe = !isRememberMe;

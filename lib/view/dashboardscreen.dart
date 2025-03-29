@@ -205,8 +205,8 @@ class EmployeeDataSource extends DataGridSource {
         DataGridCell<String>(columnName: 'Slave Id', value: "${e.slaveId}"),
         DataGridCell<double>(columnName: 'C.KWH', value: e.machineKWh),
         DataGridCell<double>(columnName: 'Energy', value: e.kWh),
-        DataGridCell<String>(columnName: 'kva', value: e.kva),
-        DataGridCell<String>(
+        DataGridCell<double>(columnName: 'kva', value: e.kva),
+        DataGridCell<double>(
             columnName: 'Average Powerfactor', value: e.avgPowerfactor),
         DataGridCell<String>(columnName: 'Power(kw)', value: e.kw),
         DataGridCell<String>(columnName: 'Meter Type', value: e.meterType),

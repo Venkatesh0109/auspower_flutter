@@ -25,12 +25,9 @@ class SheetViewScreen extends StatefulWidget {
 }
 
 class _SheetViewScreenState extends State<SheetViewScreen> {
-  int _selectedIndex = 0; 
+  int _selectedIndex = 0;
 
-  final List<String> tabTitles = [
-    'Sheet View',
-    'Grid View'
-  ]; 
+  final List<String> tabTitles = ['Sheet View', 'Grid View'];
 
   Map selectedIpAddress = {};
 
@@ -94,16 +91,14 @@ class _SheetViewScreenState extends State<SheetViewScreen> {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Row(
-          mainAxisAlignment:
-              MainAxisAlignment.center, 
+          mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(tabTitles.length, (index) {
             return Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 10.0), 
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    _selectedIndex = index; 
+                    _selectedIndex = index;
                   });
                 },
                 child: Container(
@@ -253,9 +248,9 @@ class _GridViewWidgetState extends State<GridViewWidget> {
                           : const NeverScrollableScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: screenWidth > 600 ? 1.7 : 1.3,
-                        mainAxisSpacing: 8,
-                        crossAxisSpacing: 8,
+                        childAspectRatio: screenWidth > 600 ? 2.1 : 1.3,
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 12,
                       ),
                       itemBuilder: (context, index) {
                         final gridViewData = value.currentpowerTableData[index];

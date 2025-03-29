@@ -39,7 +39,9 @@ class _SheetViewWidgetState extends State<SheetViewWidget> {
                       ? Expanded(
                           child: sheetViewDataGrid(),
                         )
-                      : sheetViewDataGrid()
+                      : SizedBox(
+                          height: context.heightFull(),
+                          child: sheetViewDataGrid())
                 ],
               );
       },
