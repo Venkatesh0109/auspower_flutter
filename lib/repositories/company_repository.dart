@@ -30,18 +30,17 @@ class CompanyRepository {
     companyProvider.isLoading = true;
     ResponseData response =
         await APIService().post(context, "current_power/", body: body);
-    logger.i(response.data);
 
     companyProvider.isLoading = false;
     if (response.hasError) return false;
     final jsonObj = response.data;
+    logger.i(response.data["data"][0]);
     companyProvider.companyList = CompanyListModel.fromJson(jsonObj);
     // String message = response.data['message'] ?? '';
     // if (message.isNotEmpty)
     //   showMessage(context: context, isError: true, responseMessage: message);
     return true;
   }
-   
 
   Future<bool> getBranchList(
     BuildContext context, {

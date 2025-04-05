@@ -93,7 +93,7 @@ class _AuthScaffoldState extends State<AuthScaffold> {
                           children: [
                             Center(
                               child: Image.asset(
-                                "assets/images/auth_images/auspower.png",
+                                "assets/images/auth_images/Auspower_icon_old.png",
                                 height: 100,
                               ),
                             ),

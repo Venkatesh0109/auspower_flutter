@@ -56,11 +56,11 @@ class _LogoutDialogState extends State<LogoutDialog> {
                         isLoading = true;
                       });
 
-                      String? topic = value.user?.notificationTopic;
-                      if (topic != null && topic.isNotEmpty) {
-                        await FirebaseMessaging.instance
-                            .unsubscribeFromTopic(topic);
-                      }
+                      // String? topic = value.user?.notificationTopic;
+                      // if (topic != null && topic.isNotEmpty) {
+                      //   await FirebaseMessaging.instance
+                      //       .unsubscribeFromTopic(topic);
+                      // }
                       await FirebaseMessaging.instance.deleteToken();
                       storage.delete(key: StorageConstants.authCreds);
                       SqlDbRepository().deleteAll();

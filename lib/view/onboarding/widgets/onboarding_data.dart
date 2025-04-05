@@ -5,7 +5,7 @@ class OnBoardingData {
   List<OnBoardingDatum> data = [
     OnBoardingDatum(
         image: LocalImages.plane,
-        title: 'Welcome to Auspower',
+        title: 'Welcome',
         desc: 'An Energy Management System helps you monitor and control your energy usage, ensuring you save money and reduce your environmental footprint.',
         color: const Color(0xffBBEBE3),
         animationOffset: const Offset(-1, 1)),

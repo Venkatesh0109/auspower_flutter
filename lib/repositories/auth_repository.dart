@@ -60,11 +60,14 @@ class AuthRepository {
     }
   }
 
+
+
   void saveCreds(BuildContext context, ResponseData responseData) {
+    logger.f(responseData.data["data"][0]??{});
     AuthUser user = AuthUser.fromJson(responseData.data['data'][0] ?? {});
     storage.write(key: StorageConstants.authCreds, value: jsonEncode(user));
-    logger.e(user.notificationTopic);
-    supscripeTopic(context, user.notificationTopic);
+    // logger.e(user.notificationTopic);
+    // supscripeTopic(context, user.notificationTopic);
 
     authProvider.user = user;
     authProvider.token = responseData.data['access_token'] ?? '';

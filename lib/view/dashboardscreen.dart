@@ -203,12 +203,12 @@ class EmployeeDataSource extends DataGridSource {
         DataGridCell<String>(
             columnName: 'Meter', value: "${e.meterCode} - ${e.meterName}"),
         DataGridCell<String>(columnName: 'Slave Id', value: "${e.slaveId}"),
-        DataGridCell<double>(columnName: 'C.KWH', value: e.machineKWh),
-        DataGridCell<double>(columnName: 'Energy', value: e.kWh),
-        DataGridCell<double>(columnName: 'kva', value: e.kva),
-        DataGridCell<double>(
+        DataGridCell<dynamic>(columnName: 'C.KWH', value: e.machineKWh),
+        DataGridCell<dynamic>(columnName: 'Energy', value: e.kWh),
+        DataGridCell<dynamic>(columnName: 'kva', value: e.kva),
+        DataGridCell<dynamic>(
             columnName: 'Average Powerfactor', value: e.avgPowerfactor),
-        DataGridCell<String>(columnName: 'Power(kw)', value: e.kw),
+        DataGridCell<dynamic>(columnName: 'Power(kw)', value: e.kw),
         DataGridCell<String>(columnName: 'Meter Type', value: e.meterType),
         DataGridCell<String>(columnName: 'IP Address', value: e.ipAddress),
       ]);

@@ -78,7 +78,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Palette.pureWhite,
       body: Center(
-          child: Image.asset("assets/images/auth_images/auspower_icon.png",
+          child: Image.asset("assets/images/auth_images/Auspower_icon_old.png",
               height: 150)),
     );
   }

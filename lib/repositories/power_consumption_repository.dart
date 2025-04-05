@@ -150,16 +150,13 @@ class PowerConsumptionRepository {
     if (response.hasError) return false;
     List<Map<String, dynamic>> data =
         List<Map<String, dynamic>>.from(response.data['data']);
-    // logger.w(data);
-
     powerProvider.getEnergyEntryList(data, isDaily);
-
     return true;
   }
 
   Future<bool> getEnergyAnalysis(BuildContext context,
       {required Map<String, dynamic> params}) async {
-    logger.f(params);
+    // logger.f(params);
     powerProvider.isLoading = true;
     ResponseData response =
         await APIService().post(context, "current_power/", body: params);
